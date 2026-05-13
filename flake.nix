@@ -4,7 +4,7 @@
 	description = "gl00m's Home Manager config";
 
 	inputs = {
-		nixpkgs.url = "nixpkgs/nixos-unstable;
+		nixpkgs.url = "nixpkgs/nixos-unstable";
 		
 		home-manager = {
 			url = "github:nix-community/home-manager";
@@ -12,11 +12,11 @@
 };
 };
 
-outputs = { nixpkgs, home-manager, ...};
+outputs = { nixpkgs, home-manager, ...}:
 
 let
 	lib = nixpkgs.lib;
-system = "x86_64-linus";
+system = "x86_64-linux";
 pkgs = import nixpkgs {inherit system; };
 
 in {
