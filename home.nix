@@ -3,12 +3,13 @@
   home = {
     username = "gl00m";
     homeDirectory = "/home/gl00m";
-    stateVersion = "23.11";
+    stateVersion = "25.11";
 
     packages = with pkgs; [
       kitty
       firefox
       vim
+      neovim
       git
     ];
   };
