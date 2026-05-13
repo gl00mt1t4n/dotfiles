@@ -12,6 +12,8 @@
   programs.bash = {
     enable = true;
     bashrcExtra = ''
+      eval "$(zoxide init bash)"
+      eval "$(fzf --bash)"
       nixrebuild() {
         case "$1" in
           -system) cd /home/gl00m/dotfiles && make system ;;
@@ -19,8 +21,6 @@
           *)       cd /home/gl00m/dotfiles && make full ;;
         esac
       }
-      eval "$(zoxide init bash)"
-      eval "$(fzf --bash)"
     '';
     shellAliases = {
       dotfiles = "cd /home/gl00m/dotfiles";
