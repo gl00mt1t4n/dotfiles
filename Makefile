@@ -21,5 +21,5 @@ clean:
 
 commit:
 	@cd /home/gl00m/dotfiles && git add .
-	@read -p "Commit message: " msg; git commit -m "$$msg"
+	@read -p "Commit message: " msg; git diff --cached --quiet || git commit -m "$$msg"
 	@git push
