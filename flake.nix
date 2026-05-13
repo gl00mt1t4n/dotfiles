@@ -1,30 +1,41 @@
-#flake.nix
-
 {
-	description = "gl00m's Home Manager config";
+  description = "gl00m's system config";
 
-	inputs = {
-		nixpkgs.url = "nixpkgs/nixos-unstable";
-		
-		home-manager = {
-			url = "github:nix-community/home-manager";
-			inputs.nixpkgs.follows = "nixpkgs";
-};
-};
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
-outputs = { nixpkgs, home-manager, ...}:
+  outputs = { nixpkgs, home-manager, ... }: {
 
-let
-	lib = nixpkgs.lib;
-system = "x86_64-linux";
-pkgs = import nixpkgs {inherit system; };
+    # System only
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [ ./configuration.nix ];
+    };
 
-in {
-	homeConfigurations = {
-		gl00m = home-manager.lib.homeManagerConfiguration {
-inherit pkgs;
-modules = [ ./home.nix ];
-};
-};
-};
+    # User only
+    homeConfigurations.gl00m = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      modules = [ ./home.nix ];
+    };
+
+    # Both unified
+    nixosConfigurations.gl00m-full = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.gl00m = import ./home.nix;
+        }
+      ];
+    };
+
+  };
 }
