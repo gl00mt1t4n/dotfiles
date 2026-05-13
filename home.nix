@@ -15,4 +15,6 @@ stateVersion = "23.11";
 programs.bash = {
 enable = true;
 };
+programs.kitty.enable = true;
+wayland.windowManager.hyprland.enable - true;
 }
