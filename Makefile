@@ -1,20 +1,16 @@
 .PHONY: system user full update clean commit
 
-system:
+system: commit
 	sudo nixos-rebuild switch --flake .#nixos
-	$(MAKE) commit
 
-user:
+user: commit
 	home-manager switch --flake .#gl00m
-	$(MAKE) commit
 
-full:
+full: commit
 	sudo nixos-rebuild switch --flake .#gl00m-full
-	$(MAKE) commit
 
-update:
+update: commit
 	nix flake update
-	$(MAKE) commit
 
 clean:
 	nix-collect-garbage -d
