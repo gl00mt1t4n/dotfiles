@@ -7,14 +7,25 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
+    agenix = {
+    	url = "github:ryantm/agenix";
+	inputs.nixpkgs.follows = "nixpkgs";
+	};
   };
 
-  outputs = { nixpkgs, home-manager, ... }: {
+  outputs = { nixpkgs, home-manager, hermes-agent, agenix, ... }: {
 
     # System only
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./configuration.nix ];
+      modules = [
+      	./configuration.nix
+      	hermes-agent.nixosModules.default
+	agenix.nixosModules.default;
+	];
     };
 
     # User only
@@ -28,6 +39,8 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
+	hermes-agent.nixosModules.default
+	agenix.nixosModules.default;
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

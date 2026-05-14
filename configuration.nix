@@ -58,4 +58,37 @@
   # Waybar enabling
   programs.waybar.enable = true;
 
+  # Hermes Agent config
+  services.hermes-agent = {
+  	enable = true;
+	container = {
+		enable = true;
+		hostUsers = [ "gl00m" ];
+	};
+	settings = {
+		model = {
+			base_url = "https://api.anthropic.com/v1";
+			default = "claude-sonnet-4-20250514";
+		};
+		toolsets = [ "all" ];
+		memory = {
+			memory_enabled = true;
+			user_profile_enabled = true;
+		};
+		terminal = {
+			backend = "local";
+			timeout = "180";
+		};
+	};
+	environmentFiles = [ "/var/lib/hermes/env" ];
+	documents = {
+		"USER.md" = ./hermes/USER.md;
+	};
+	extraPackages = with pkgs; [
+		ripgrep
+		fd
+		git
+	];
+	addToSystemPackages = true;
+	};
 }
