@@ -4,6 +4,7 @@
     ./modules/shell.nix
     ./modules/git.nix
     ./modules/hyprland.nix
+    ./modules/waybar.nix
   ];
 
   home = {
@@ -16,6 +17,7 @@
       neovim
       vim
       git
+      pavucontrol
     ];
   };
 }
