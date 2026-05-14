@@ -93,6 +93,7 @@
   # Hermes .env readable by hermes group
   systemd.tmpfiles.rules = [
     "f /var/lib/hermes/.hermes/.env 640 hermes hermes -"
+     "f /var/lib/hermes/.hermes/.hermes_history 660 hermes hermes -"
   ];
 
   # Agenix secrets
