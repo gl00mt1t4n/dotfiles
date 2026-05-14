@@ -18,7 +18,7 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "hermes" ];
   };
 
   # Packages
@@ -63,7 +63,6 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" "hermes" ];
   };
 
   # Hermes Agent
