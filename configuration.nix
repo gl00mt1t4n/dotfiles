@@ -62,8 +62,8 @@
   services.hermes-agent = {
   	enable = true;
 	container = {
-		enable = true;
-		hostUsers = [ "gl00m" ];
+		enable = false;
+	#	hostUsers = [ "gl00m" ];
 	};
 	settings = {
 		model = {
