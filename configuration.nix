@@ -68,7 +68,7 @@
 	settings = {
 		model = {
 			base_url = "https://api.groq.com/openai/v1";
-      			default = "llama-3.3-70b-versatile";	};
+      			default = "llama-3.1-8b-instant";	};
 		toolsets = [ "all" ];
 		memory = {
 			memory_enabled = true;
