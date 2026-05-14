@@ -15,6 +15,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # User
+  # Add gloom to hermes for access
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
@@ -59,12 +60,6 @@
   programs.waybar.enable = true;
 
   # Hermes Agent config
-  # Add gl00m to hermes group for file access
-  users.users.gl00m = {
-    isNormalUser = true;
-    description = "gl00m";
-  };
-
   # Hermes Agent
   services.hermes-agent = {
     enable = true;
