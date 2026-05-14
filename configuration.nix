@@ -67,9 +67,9 @@
 	};
 	settings = {
 		model = {
-			base_url = "https://api.groq.com/openai/v1";
-      			default = "llama-3.1-8b-instant";	};
-		toolsets = [ "all" ];
+  base_url = "https://openrouter.ai/api/v1";
+  default = "google/gemini-2.5-flash-preview";
+};	toolsets = [ "all" ];
 		memory = {
 			memory_enabled = true;
 			user_profile_enabled = true;
