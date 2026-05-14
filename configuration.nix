@@ -79,7 +79,7 @@
 			timeout = 180;
 		};
 	};
-	environmentFiles = [ "/var/lib/hermes/env" ];
+	environmentFiles = [ "config.age.secrets.hermes-env.path" ];
 	documents = {
 		"USER.md" = ./hermes/USER.md;
 	};
