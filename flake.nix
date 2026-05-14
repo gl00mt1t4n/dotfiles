@@ -23,7 +23,7 @@
       system = "x86_64-linux";
       modules = [
       	./configuration.nix
-      	hermes-agent.nixosModules.default
+      	hermes-agent.nixosModules.default;
 	agenix.nixosModules.default;
 	];
     };
@@ -39,7 +39,7 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
-	hermes-agent.nixosModules.default
+	hermes-agent.nixosModules.default;
 	agenix.nixosModules.default;
         home-manager.nixosModules.home-manager
         {
