@@ -98,6 +98,11 @@
     options = [ "NOPASSWD" ];
   }];
 }];
+
+  # Tell system to rebuild files with read perms for hermes AND gl00m
+  systemd.tmpfiles.rules = [
+  "f /var/lib/hermes/.hermes/.env 640 hermes hermes -"
+];
   # Agenix should know secret
   age.secrets.hermes-env.file = ./secrets/hermes-env.age;
   age.identityPaths = [ "/home/gl00m/.config/sops/age/keys.txt" ];
