@@ -110,6 +110,10 @@ services.pipewire = {
 security.rtkit.enable = true;
 
 # Font discovery
-
 fonts.fontconfig.enable = true;
+fonts.packages = with pkgs; [
+  nerd-fonts.jetbrains-mono
+  nerd-fonts.fira-code
+  nerd-fonts.symbols-only
+];
 }
