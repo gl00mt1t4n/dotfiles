@@ -67,9 +67,8 @@
 	};
 	settings = {
 		model = {
-			base_url = "https://api.anthropic.com/v1";
-			default = "claude-sonnet-4-20250514";
-		};
+			base_url = "https://api.groq.com/openai/v1";
+      			default = "llama-3.3-70b-versatile";	};
 		toolsets = [ "all" ];
 		memory = {
 			memory_enabled = true;
@@ -77,7 +76,7 @@
 		};
 		terminal = {
 			backend = "local";
-			timeout = "180";
+			timeout = 180;
 		};
 	};
 	environmentFiles = [ "/var/lib/hermes/env" ];
@@ -91,4 +90,7 @@
 	];
 	addToSystemPackages = true;
 	};
+
+  # Agenix should know secret
+  age.secrets.hermes-env.file = ./secrets/hermes-env.age;
 }
