@@ -24,8 +24,8 @@
     '';
     shellAliases = {
       dotfiles = "cd /home/gl00m/dotfiles";
-      nixconf  = "sudo vim /home/gl00m/dotfiles/configuration.nix";
-      hyprconf = "vim $HOME/.config/hypr/hyprland.conf";
+      nixconf  = "sudo nvim /home/gl00m/dotfiles/configuration.nix";
+      hyprconf = "nvim /home/gl00m/dotfiles/config/hypr/hyprland.conf";
       ls       = "eza --icons";
       ll       = "eza -la --icons";
       cat      = "bat";
