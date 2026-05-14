@@ -27,6 +27,8 @@
     vim
     home-manager
     gnumake
+    hyprlauncher
+    blueman
   ];
 
   # Shell
@@ -43,5 +45,13 @@
 
   # System state version
   system.stateVersion = "25.11";
+
+  # Bluetooth enabling
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
+
+  # Waybar enabling
+  programs.waybar.enable = true;
 
 }
