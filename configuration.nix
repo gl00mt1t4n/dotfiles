@@ -93,4 +93,5 @@
 
   # Agenix should know secret
   age.secrets.hermes-env.file = ./secrets/hermes-env.age;
+  age.identityPaths = [ "/home/gl00m/.config/sops/age/keys.txt" ];
 }
