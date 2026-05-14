@@ -66,7 +66,7 @@
     settings = {
       model = {
         base_url = "https://openrouter.ai/api/v1";
-        default = "google/gemini-3-flash-preview";
+        default = default = "nvidia/nemotron-3-super-120b-a12b:free";
       };
       toolsets = [ "all" ];
       memory = {
