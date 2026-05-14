@@ -59,51 +59,48 @@
   programs.waybar.enable = true;
 
   # Hermes Agent config
-  services.hermes-agent = {
-  	enable = true;
-	container = {
-		enable = false;
-	#	hostUsers = [ "gl00m" ];
-	};
-	settings = {
-		model = {
-  base_url = "https://openrouter.ai/api/v1";
-  default = "google/gemini-2.5-flash-preview";
-};	toolsets = [ "all" ];
-		memory = {
-			memory_enabled = true;
-			user_profile_enabled = true;
-		};
-		terminal = {
-			backend = "local";
-			timeout = 180;
-		};
-	};
-	environmentFiles = [ config.age.secrets.hermes-env.path ];
-	documents = {
-		"USER.md" = ./hermes/USER.md;
-	};
-	extraPackages = with pkgs; [
-		ripgrep
-		fd
-		git
-	];
-	addToSystemPackages = true;
-	};
-  #Hermes no password permission
-  security.sudo.extraRules = [{
-  users = [ "gl00m" ];
-  commands = [{
-    command = "/run/current-system/sw/bin/docker";
-    options = [ "NOPASSWD" ];
-  }];
-}];
+  # Add gl00m to hermes group for file access
+  users.users.gl00m = {
+    isNormalUser = true;
+    description = "gl00m";
+    extraGroups = [ "networkmanager" "wheel" "hermes" ];
+  };
 
-  # Tell system to rebuild files with read perms for hermes AND gl00m
+  # Hermes Agent
+  services.hermes-agent = {
+    enable = true;
+    settings = {
+      model = {
+        base_url = "https://openrouter.ai/api/v1";
+        default = "google/gemini-3-flash-preview";
+      };
+      toolsets = [ "all" ];
+      memory = {
+        memory_enabled = true;
+        user_profile_enabled = true;
+      };
+      terminal = {
+        backend = "local";
+        timeout = 180;
+      };
+    };
+    environmentFiles = [ config.age.secrets.hermes-env.path ];
+    documents = {
+      "USER.md" = ./hermes/USER.md;
+    };
+    extraPackages = with pkgs; [
+      ripgrep
+      fd
+      git
+    ];
+    addToSystemPackages = true;
+  };
+
+  # Hermes .env readable by hermes group
   systemd.tmpfiles.rules = [
-  "f /var/lib/hermes/.hermes/.env 640 hermes hermes -"
-];
-  # Agenix should know secret
+    "f /var/lib/hermes/.hermes/.env 640 hermes hermes -"
+  ];
+
+  # Agenix secrets
   age.secrets.hermes-env.file = ./secrets/hermes-env.age;
   age.identityPaths = [ "/home/gl00m/.config/sops/age/keys.txt" ];
-}
