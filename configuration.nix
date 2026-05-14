@@ -29,6 +29,10 @@
     gnumake
     hyprlauncher
     blueman
+    hyprlock
+    hypridle
+    hyprpaper
+    mako
   ];
 
   # Shell
