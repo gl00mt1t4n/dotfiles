@@ -7,6 +7,18 @@
     fd
     fzf
     zoxide
+    wl-clipboard
+    #screenshots
+    grim
+    slurp #region selection
+
+    # fonts
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
+    font-awesome
+    (nerdfonts.override { fonts = [ "JetBrainsMono" "Firacode" ]; })
+
   ];
 
   programs.bash = {

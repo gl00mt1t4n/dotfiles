@@ -99,4 +99,17 @@
   # Agenix secrets
   age.secrets.hermes-env.file = ./secrets/hermes-env.age;
   age.identityPaths = [ "/home/gl00m/.config/sops/age/keys.txt" ];
+
+  # Audio
+services.pipewire = {
+  enable = true;
+  alsa.enable = true;
+  alsa.support32Bit = true;
+  pulse.enable = true;
+};
+security.rtkit.enable = true;
+
+# Font discovery
+
+fonts.fontconfig.enable = true;
 }
