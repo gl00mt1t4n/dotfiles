@@ -12,12 +12,6 @@
     grim
     slurp #region selection
 
-    # fonts
-    noto-fonts
-    noto-fonts-cjk-sans
-    font-awesome
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "Firacode" ]; })
-
   ];
 
   programs.bash = {
