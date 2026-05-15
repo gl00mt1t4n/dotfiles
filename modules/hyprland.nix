@@ -10,4 +10,9 @@
     source = ../config/hypr/view-logs.sh;
     executable = true;
   };
+
+  home.file.".config/hypr/screenshot.sh" = {
+    source = ../config/hypr/screenshot.sh;
+    executable = true;
+  };
 }

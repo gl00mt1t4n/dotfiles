@@ -19,7 +19,7 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" "hermes" ];
+    extraGroups = [ "networkmanager" "wheel" "hermes" "video" ];
   };
 
   # Packages
