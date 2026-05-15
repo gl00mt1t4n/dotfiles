@@ -69,7 +69,6 @@
   # Waybar enabling
   programs.waybar.enable = true;
 
-  # Hermes Agent config
   # Hermes Agent
   services.hermes-agent = {
     enable = true;
@@ -120,11 +119,17 @@
   # Kernel (6.10+ required for full ASUS support)
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Let brightness keys reach Hyprland instead of being consumed by the kernel
+  boot.kernelParams = [ "video.brightness_switch_enabled=0" ];
+
   # ASUS hardware support
   services.asusd = {
     enable = true;
   };
   services.supergfxd.enable = true;
   systemd.services.supergfxd.path = [ pkgs.pciutils ];
+
+  # asusd needs /etc/asusd to exist or it crashes on mount namespacing setup
+  systemd.tmpfiles.rules = [ "d /etc/asusd 0755 root root -" ];
 
 }
