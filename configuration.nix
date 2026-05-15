@@ -132,4 +132,9 @@
   # asusd needs /etc/asusd to exist or it crashes on mount namespacing setup
   systemd.tmpfiles.rules = [ "d /etc/asusd 0755 root root -" ];
 
+  # Give the video group write access to backlight devices so swayosd-server can control brightness
+  services.udev.extraRules = ''
+    SUBSYSTEM=="backlight", ACTION=="add", GROUP="video", MODE="0664"
+  '';
+
 }
