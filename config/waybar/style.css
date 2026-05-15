@@ -12,26 +12,6 @@ window#waybar {
     border-bottom: 1px solid #313244;
 }
 
-#workspaces button {
-    padding: 0 10px;
-    color: #45475a;
-    background: transparent;
-}
-
-#workspaces button.occupied {
-    color: #cdd6f4;
-}
-
-#workspaces button.active {
-    color: #cdd6f4;
-    background-color: #313244;
-}
-
-#workspaces button:hover {
-    background-color: #45475a;
-    color: #cdd6f4;
-}
-
 #clock {
     padding: 0 12px;
     color: #cdd6f4;

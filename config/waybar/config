@@ -4,14 +4,10 @@
   "position": "top",
   "height": 30,
   "spacing": 4,
-  "modules-left": ["hyprland/workspaces"],
+  "modules-left": [],
   "modules-center": ["clock"],
   "modules-right": ["pulseaudio", "battery", "network", "bluetooth", "tray"],
 
-  "hyprland/workspaces": {
-    "format": "{id}",
-    "on-click": "activate"
-  },
   "clock": {
     "format": "{:%H:%M}",
     "format-alt": "{:%Y-%m-%d}",

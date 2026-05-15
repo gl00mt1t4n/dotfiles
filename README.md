@@ -155,23 +155,10 @@ dotfiles/
 | `SUPER + V` | Toggle floating |
 | `SUPER + L` | Lock screen |
 | `SUPER + M` | Exit Hyprland |
-| `SUPER + S` | Toggle scratchpad |
-| `SUPER + [1–9]` | Switch to workspace |
-| `SUPER + SHIFT + [1–9]` | Move window to workspace |
 | `SUPER + arrows` | Move focus |
-| `SUPER + scroll` | Scroll through workspaces |
 | `Print` | Screenshot to ~/Pictures/ |
 | `SUPER + SHIFT + Print` | Region screenshot |
 | `XF86` volume/brightness keys | Volume and brightness |
-
-**Gestures:**
-- 3-finger horizontal swipe: switch workspaces
-
----
-
-## Workspace Philosophy
-
-Workspaces are used as independent work contexts — not OS-level profiles. Workspace 1 is the default landing point. The scratchpad (`SUPER+S`) is for persistent apps (e.g. Spotify, a pinned terminal) that should float above any workspace.
 
 ---
 
@@ -197,4 +184,4 @@ Workspaces are used as independent work contexts — not OS-level profiles. Work
 - Wallpaper selection
 - Dev tooling (Node, Python, Rust, direnv, Docker)
 - ScreenPad Plus advanced usage (asusctl profiles)
-- Widget layer for workspace 1 (eww or AGS — not yet decided)
+- Workspace navigation and overview (pending nixpkgs plugin updates for Hyprland 0.54)
