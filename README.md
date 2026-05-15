@@ -93,7 +93,8 @@ dotfiles/
 │   │   ├── hyprland.conf        # Compositor: monitors, keybinds, animations, rules
 │   │   ├── hypridle.conf        # Idle daemon: lock after 5min, suspend after 10min
 │   │   ├── hyprlock.conf        # Lock screen: blurred background, clock, password field
-│   │   └── hyprpaper.conf       # Wallpaper daemon (wallpaper lines commented, add when ready)
+│   │   ├── hyprpaper.conf       # Wallpaper daemon (wallpaper lines commented, add when ready)
+│   │   └── view-logs.sh         # SUPER+grave: opens kitty with Hyprland log + system journal
 │   ├── waybar/
 │   │   ├── config               # Bar layout, modules
 │   │   └── style.css            # Bar styling (Catppuccin Mocha)
@@ -155,6 +156,7 @@ dotfiles/
 | `SUPER + V` | Toggle floating |
 | `SUPER + L` | Lock screen |
 | `SUPER + M` | Exit Hyprland |
+| `SUPER + grave` | Open log viewer (Hyprland log + system journal) |
 | `SUPER + arrows` | Move focus |
 | `Print` | Screenshot to ~/Pictures/ |
 | `SUPER + SHIFT + Print` | Region screenshot |
