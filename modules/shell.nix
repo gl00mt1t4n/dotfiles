@@ -37,11 +37,32 @@
       eval "$(zoxide init bash)"
       eval "$(fzf --bash)"
       nixrebuild() {
+        local dotfiles="/home/gl00m/dotfiles"
+        local dry_cmd build_cmd
+
         case "$1" in
-          -system) cd /home/gl00m/dotfiles && make system ;;
-          -user)   cd /home/gl00m/dotfiles && make user ;;
-          *)       cd /home/gl00m/dotfiles && make full ;;
+          -system)
+            dry_cmd="sudo nixos-rebuild dry-activate --flake $dotfiles#nixos"
+            build_cmd="make -C $dotfiles system" ;;
+          -user)
+            dry_cmd="home-manager build --flake $dotfiles#gl00m"
+            build_cmd="make -C $dotfiles user" ;;
+          *)
+            dry_cmd="sudo nixos-rebuild dry-activate --flake $dotfiles#gl00m-full"
+            build_cmd="make -C $dotfiles full" ;;
         esac
+
+        git -C "$dotfiles" add .
+        read -r -p "Commit message (blank to skip): " msg
+        [ -n "$msg" ] && git -C "$dotfiles" commit -m "$msg"
+
+        if eval "$dry_cmd"; then
+          [ -n "$msg" ] && git -C "$dotfiles" push
+          eval "$build_cmd"
+        else
+          [ -n "$msg" ] && git -C "$dotfiles" reset --soft HEAD~1
+          return 1
+        fi
       }
     '';
     shellAliases = {
