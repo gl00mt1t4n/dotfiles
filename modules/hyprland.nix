@@ -15,4 +15,9 @@
     source = ../config/hypr/screenshot.sh;
     executable = true;
   };
+
+  home.file.".config/hypr/kbd-backlight.sh" = {
+    source = ../config/hypr/kbd-backlight.sh;
+    executable = true;
+  };
 }

@@ -132,9 +132,11 @@
   # asusd needs /etc/asusd to exist or it crashes on mount namespacing setup
   systemd.tmpfiles.rules = [ "d /etc/asusd 0755 root root -" ];
 
-  # Give the video group write access to backlight devices so swayosd-server can control brightness
+  # Give the video group write access to backlight and keyboard LED sysfs files
+  # GROUP/MODE only apply to /dev nodes; sysfs files need explicit RUN+= chmod
   services.udev.extraRules = ''
-    SUBSYSTEM=="backlight", ACTION=="add", GROUP="video", MODE="0664"
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys%p/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/brightness"
+    ACTION=="add", SUBSYSTEM=="leds", KERNEL=="asus::kbd_backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys%p/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/brightness"
   '';
 
 }

@@ -22,6 +22,7 @@
       claude-code
       zenity      # screenshot rename dialog
       swayosd     # OSD overlay for volume and brightness keys
+      zen-browser
     ];
   };
 }
