@@ -35,6 +35,7 @@
     hyprpaper
     mako
     asusctl
+    supergfxctl
   ];
 
   # Shell
@@ -102,24 +103,30 @@
   age.identityPaths = [ "/home/gl00m/.config/sops/age/keys.txt" ];
 
   # Audio
-services.pipewire = {
-  enable = true;
-  alsa.enable = true;
-  alsa.support32Bit = true;
-  pulse.enable = true;
-};
-security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  security.rtkit.enable = true;
 
-# Font discovery
-fonts.fontconfig.enable = true;
-fonts.packages = with pkgs; [
-  nerd-fonts.jetbrains-mono
-  nerd-fonts.fira-code
-  nerd-fonts.symbols-only
-];
-  # ASUS Hardware support
+  # Fonts
+  fonts.fontconfig.enable = true;
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
+    nerd-fonts.symbols-only
+  ];
+
+  # Kernel (6.10+ required for full ASUS support)
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # ASUS hardware support
   services.asusd = {
-  enable = true;
-  enableUserService = true;
-};
+    enable = true;
+    enableUserService = true;
+  };
+  services.supergfxd.enable = true;
+  systemd.services.supergfxd.path = [ pkgs.pciutils ];
 }
