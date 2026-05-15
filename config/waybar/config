@@ -10,10 +10,7 @@
 
   "hyprland/workspaces": {
     "format": "{id}",
-    "on-click": "activate",
-    "persistent-workspaces": {
-      "eDP-1": 5
-    }
+    "on-click": "activate"
   },
   "clock": {
     "format": "{:%H:%M}",

@@ -93,10 +93,9 @@ dotfiles/
 │   │   ├── hyprland.conf        # Compositor: monitors, keybinds, animations, rules
 │   │   ├── hypridle.conf        # Idle daemon: lock after 5min, suspend after 10min
 │   │   ├── hyprlock.conf        # Lock screen: blurred background, clock, password field
-│   │   ├── hyprpaper.conf       # Wallpaper daemon (wallpaper lines commented, add when ready)
-│   │   └── next-workspace.sh   # Script: go to next workspace, open launcher if empty
+│   │   └── hyprpaper.conf       # Wallpaper daemon (wallpaper lines commented, add when ready)
 │   ├── waybar/
-│   │   ├── config               # Bar layout, modules, persistent workspaces
+│   │   ├── config               # Bar layout, modules
 │   │   └── style.css            # Bar styling (Catppuccin Mocha)
 │   ├── mako/
 │   │   └── config               # Notification daemon styling
@@ -152,8 +151,6 @@ dotfiles/
 | `SUPER + Q` | Open terminal (kitty) |
 | `SUPER + C` | Close active window |
 | `SUPER + R` | Open app launcher |
-| `SUPER + N` | Next workspace (opens launcher if empty) |
-| `SUPER + TAB` | Workspace overview (zoom out, see all) |
 | `SUPER + E` | File manager (dolphin) |
 | `SUPER + V` | Toggle floating |
 | `SUPER + L` | Lock screen |
@@ -169,13 +166,12 @@ dotfiles/
 
 **Gestures:**
 - 3-finger horizontal swipe: switch workspaces
-- 4-finger swipe up: workspace overview (hyprexpo)
 
 ---
 
 ## Workspace Philosophy
 
-Workspaces are used as independent work contexts — not OS-level profiles. Workspace 1 is the default landing point. `SUPER+N` moves to the next workspace and automatically opens the launcher if it is empty, making it fast to spin up a new context. `SUPER+TAB` gives a zoomed-out view of all active workspaces. The scratchpad (`SUPER+S`) is for persistent apps (e.g. Spotify, a pinned terminal) that should float above any workspace.
+Workspaces are used as independent work contexts — not OS-level profiles. Workspace 1 is the default landing point. The scratchpad (`SUPER+S`) is for persistent apps (e.g. Spotify, a pinned terminal) that should float above any workspace.
 
 ---
 
