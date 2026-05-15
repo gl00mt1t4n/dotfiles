@@ -125,7 +125,6 @@
   # ASUS hardware support
   services.asusd = {
     enable = true;
-    enableUserService = true;
   };
   services.supergfxd.enable = true;
   systemd.services.supergfxd.path = [ pkgs.pciutils ];
