@@ -1,138 +1,90 @@
 # gl00m's dotfiles
 
-NixOS configuration for ASUS Zenbook Duo UX8406CA. Everything — system, desktop, shell, tools — is declared here. One repo, one command to rebuild the entire machine.
-
----
-
-## Design Philosophy
-
-The goal is a fully reproducible system where no manual post-install steps exist (outside of secrets). If this repo is cloned onto a fresh NixOS install and `nixos-rebuild switch --flake .#gl00m-full` is run, the result should be identical to the current machine — same packages, same config, same desktop, same shell behavior.
-
----
-
-## Architecture
-
-### Why NixOS
-
-Traditional Linux distros are stateful — you install packages over time, edit config files, and the system slowly drifts from any reproducible baseline. NixOS inverts this: the entire system is declared in text files and built atomically. Every change produces a new "generation" you can boot into or roll back from. The system state is always derivable from the repo.
-
-### Why Flakes
-
-Before flakes, NixOS used `nix-channel` to pull nixpkgs. Channels are not pinned — two machines running the same config on different days could get different package versions. Flakes solve this by declaring all inputs explicitly and locking their exact git commits in `flake.lock`. The result is deterministic: same repo + same lock file = identical system, always.
-
-### Why Home-manager
-
-NixOS's `configuration.nix` manages the system layer — kernel, hardware, services, system-wide packages. It requires root and has no concept of per-user configuration. Home-manager fills the gap: it manages everything under `~/` declaratively, as the user, without root. Shell config, dotfiles, user packages, and terminal settings all live here. This separation also means user-level changes (`nixrebuild -user`) are faster and don't touch the system.
-
-Home-manager runs as a NixOS module in this config (the `gl00m-full` flake target), meaning `make full` applies both system and user changes in a single command. The standalone `gl00m` target exists for user-only rebuilds via `nixrebuild -user`.
-
-### Why Hyprland
-
-Hyprland is a tiling Wayland compositor. The choice over a full desktop environment (GNOME, KDE) was deliberate:
-
-- **Control**: every behavior is explicitly configured — no hidden defaults or global settings menus overriding things
-- **Performance**: no DE overhead; just the compositor, a bar, a notification daemon, and what you choose to add
-- **Wayland-native**: XWayland support is included for legacy apps, but the session itself is modern Wayland
-- **Composability**: each component (launcher, lock screen, idle daemon, wallpaper) is a separate tool you choose and configure independently
-
-The tradeoff is that nothing works out of the box — you have to wire everything together yourself, which is what this repo is.
-
-### Modular Structure
-
-Home-manager config is split into modules (`modules/`) rather than one large `home.nix`. Each module owns one concern: shell tooling, git, desktop symlinks, terminal, bar. This makes it easy to find and change things without understanding the entire config. `home.nix` is just the import list.
-
-### The nixrebuild Flow
-
-The `nixrebuild` function enforces a workflow: stage changes → commit → dry-activate (build without applying) → if clean, push → apply. This ensures:
-
-1. The git tree is clean when nix evaluates (no "dirty tree" warnings, no testing uncommitted state)
-2. A broken config never gets pushed to the remote — the dry run catches it first
-3. If the dry run fails, the local commit is automatically rolled back (`git reset --soft HEAD~1`), leaving changes staged but uncommitted
-
-### Why No Secrets Manager (Agenix Removed)
-
-Agenix was originally used to manage the Hermes API key. It decrypts secrets to `/run/agenix/` at activation time — but `/run/` is a tmpfs (RAM only). If the private age key was unavailable during activation, the secret was silently absent and Hermes started without an API key. The fix was to remove agenix entirely and use a manually-managed env file at `/var/lib/hermes/env`. This file is not tracked by nix, survives all rebuilds and reboots, and is created once by the user.
+NixOS + Hyprland on an ASUS Zenbook Duo UX8406CA. One repo, one command to rebuild the whole machine.
 
 ---
 
 ## Hardware
 
-| Component | Details |
-|-----------|---------|
-| Machine | ASUS Zenbook Duo UX8406CA |
-| CPU | Intel Core Ultra (with NPU) |
-| Displays | eDP-1 (main) + eDP-2 (ScreenPad Plus, below keyboard) |
-| Resolution | 2880×1800@120Hz, scale 2, both screens |
-| OS | NixOS unstable |
-| Boot | systemd-boot, EFI |
-
-The Intel NPU is enabled (`hardware.cpu.intel.npu.enable = true`). The ASUS-specific daemons `asusd` and `supergfxd` handle fan curves, keyboard backlight, and GPU switching.
+ASUS Zenbook Duo UX8406CA — Intel Core Ultra, two 2880×1800@120Hz screens. eDP-1 is the main display; eDP-2 is the ScreenPad Plus (the secondary screen below the keyboard). eDP-2 is currently disabled — dual-screen behaviour needs proper configuration before it's usable.
 
 ---
 
-## File Structure
+## How the config is structured
 
-```
-dotfiles/
-├── flake.nix                    # Entry point — declares inputs and the three build targets
-├── flake.lock                   # Pinned input versions (do not edit manually)
-├── Makefile                     # Pure build commands (no git logic)
-├── configuration.nix            # System layer: hardware, kernel, services, users
-├── hardware-configuration.nix   # Auto-generated, do not edit
-├── home.nix                     # User layer root: imports all modules
-│
-├── modules/
-│   ├── shell.nix                # Bash config, aliases, CLI tools, nixrebuild function
-│   ├── git.nix                  # Git identity, delta, gh CLI
-│   ├── hyprland.nix             # Symlinks all hypr/desktop configs into ~/.config/
-│   ├── waybar.nix               # Symlinks waybar config + CSS
-│   └── kitty.nix                # Symlinks kitty terminal config
-│
-├── config/
-│   ├── hypr/
-│   │   ├── hyprland.conf        # Compositor: monitors, keybinds, animations, rules
-│   │   ├── hypridle.conf        # Idle daemon: lock after 5min, suspend after 10min
-│   │   ├── hyprlock.conf        # Lock screen: blurred background, clock, password field
-│   │   ├── hyprpaper.conf       # Wallpaper daemon (wallpaper lines commented, add when ready)
-│   │   └── view-logs.sh         # SUPER+grave: opens kitty with Hyprland log + system journal
-│   ├── waybar/
-│   │   ├── config               # Bar layout, modules
-│   │   └── style.css            # Bar styling (Catppuccin Mocha)
-│   ├── mako/
-│   │   └── config               # Notification daemon styling
-│   └── kitty/
-│       └── kitty.conf           # Terminal font, padding, cursor
-│
-└── hermes/
-    └── USER.md                  # System context document fed to the Hermes AI agent
-```
+Three layers, each with a clear scope:
+
+**`configuration.nix` — system layer.** Kernel, hardware, services, user group membership, system packages. Requires root. If something needs to write to `/sys/`, own a port, or run as a system service, it goes here. Examples: PipeWire, asusd, swayosd (which needs udev rules for backlight access), the user's `video` group membership.
+
+**`home.nix` + `modules/` — user layer.** Everything under `~/`. Shell config, user packages, dotfile symlinks, terminal settings. Managed by home-manager — no root needed. Faster to rebuild than the system layer (`nixrebuild -user`).
+
+**`config/` — the actual dotfiles.** Hyprland, waybar, kitty, mako configs live here. Home-manager symlinks them into `~/.config/` on every rebuild. Editing `~/.config/hypr/hyprland.conf` directly won't work — it's a read-only symlink. Changes go through the repo.
 
 ---
 
-## Flake Targets
+## Flakes and reproducibility
 
-| Target | Command | What it builds |
-|--------|---------|----------------|
-| `gl00m-full` | `make full` | System + home-manager (use this) |
+`flake.lock` pins every input (nixpkgs, home-manager, hermes-agent) to an exact git commit. Same repo + same lock file = identical system on any machine. `nix flake update` bumps inputs when you want newer packages and regenerates the lock file so you can review the diff before applying.
+
+The three build targets:
+
+| Target | Command | Scope |
+|--------|---------|-------|
+| `gl00m-full` | `make full` | System + home-manager — the one to use |
 | `nixos` | `make system` | System only (`configuration.nix`) |
-| `gl00m` | `make user` | Home-manager only (`home.nix`) |
+| `gl00m` | `make user` | Home-manager only, no sudo |
 
 ---
 
-## Commands
+## nixrebuild
 
-| Command | Action |
-|---------|--------|
-| `nixrebuild` | Full rebuild: stage → commit → dry run → push → switch |
-| `nixrebuild -system` | System-only rebuild |
-| `nixrebuild -user` | User-only rebuild (faster, no sudo) |
-| `make full` | Raw full rebuild (no git flow) |
-| `make update` | Update all flake inputs |
-| `make clean` | Garbage collect old nix store paths |
+The `nixrebuild` shell function (defined in `modules/shell.nix`) is how changes get applied. Running it bare does a full rebuild; `-system` and `-user` target individual layers.
+
+```
+nixrebuild           # full rebuild
+nixrebuild -system   # configuration.nix changes only
+nixrebuild -user     # home.nix changes only, no sudo, faster
+```
+
+What it does in order:
+
+1. `git add .` — stages everything in the dotfiles repo
+2. Prompts for a commit message (blank = skip commit and push)
+3. Commits if a message was given
+4. Runs `nixos-rebuild dry-activate` — this builds the config without applying it. Any broken nix expression, missing package, or compilation failure surfaces here
+5. If dry-activate fails: rolls back the commit with `git reset --soft HEAD~1` so changes stay staged but uncommitted, and shows the error as-is
+6. If dry-activate passes: pushes to remote, then runs the actual rebuild
+
+The commit-before-dry-run order matters. NixOS warns about a "dirty git tree" if there are staged changes when it evaluates the flake. Committing first keeps evaluation clean. The rollback handles the failure case without losing work.
 
 ---
 
-## Shell Aliases
+## Config symlinks
+
+Home-manager deploys config files by symlinking them from the repo into `~/.config/`. A module entry looks like:
+
+```nix
+home.file.".config/hypr/hyprland.conf".source = ../config/hypr/hyprland.conf;
+```
+
+This creates `~/.config/hypr/hyprland.conf → ~/dotfiles/config/hypr/hyprland.conf`. Scripts get `executable = true` added:
+
+```nix
+home.file.".config/hypr/screenshot.sh" = {
+  source = ../config/hypr/screenshot.sh;
+  executable = true;
+};
+```
+
+The symlink is read-only by design. If you try to edit `~/.config/hypr/hyprland.conf` in place, it'll fail — the edit goes in the repo file. This is the point: the repo is always the source of truth.
+
+---
+
+## Shell setup
+
+Defined in `modules/shell.nix`. Bash with starship prompt, zoxide for directory jumping, fzf for fuzzy search.
+
+Aliases:
 
 | Alias | Expands to |
 |-------|-----------|
@@ -145,45 +97,89 @@ dotfiles/
 
 ---
 
-## Keybindings
+## File structure
 
-| Binding | Action |
-|---------|--------|
-| `SUPER + Q` | Open terminal (kitty) |
-| `SUPER + C` | Close active window |
-| `SUPER + R` | Open app launcher |
-| `SUPER + E` | File manager (dolphin) |
-| `SUPER + V` | Toggle floating |
-| `SUPER + L` | Lock screen |
-| `SUPER + M` | Exit Hyprland |
-| `SUPER + grave` | Open log viewer (Hyprland log + system journal) |
-| `SUPER + arrows` | Move focus |
-| `Print` | Screenshot to ~/Pictures/ |
-| `SUPER + SHIFT + Print` | Region screenshot |
-| `XF86` volume/brightness keys | Volume and brightness |
+```
+dotfiles/
+├── flake.nix                   # Inputs and build targets
+├── flake.lock                  # Pinned input versions — do not edit manually
+├── Makefile                    # Raw build commands (no git logic)
+├── configuration.nix           # System: hardware, kernel, services, users
+├── hardware-configuration.nix  # Auto-generated by NixOS installer
+├── home.nix                    # Imports all user modules
+│
+├── modules/
+│   ├── shell.nix               # Bash, aliases, starship, nixrebuild
+│   ├── git.nix                 # Git identity, delta pager, gh CLI
+│   ├── hyprland.nix            # Symlinks hypr/desktop configs into ~/.config/
+│   ├── waybar.nix              # Symlinks waybar config + CSS
+│   └── kitty.nix               # Symlinks kitty terminal config
+│
+├── config/
+│   ├── hypr/
+│   │   ├── hyprland.conf       # Compositor: monitors, keybinds, rules, animations
+│   │   ├── hypridle.conf       # Lock after 5min idle, suspend after 10min
+│   │   ├── hyprlock.conf       # Lock screen: blurred bg, clock, password field
+│   │   ├── hyprpaper.conf      # Wallpaper daemon (lines commented — add wallpaper path)
+│   │   ├── screenshot.sh       # Print key handler: single = region, double = fullscreen
+│   │   └── view-logs.sh        # SUPER+grave: Hyprland log + system journal in kitty
+│   ├── waybar/
+│   │   ├── config              # Bar layout and modules
+│   │   └── style.css           # Catppuccin Mocha styling
+│   ├── mako/
+│   │   └── config              # Notification daemon styling
+│   └── kitty/
+│       └── kitty.conf          # Font, padding, colors
+│
+└── hermes/
+    └── USER.md                 # Context document fed to the Hermes AI assistant
+```
 
 ---
 
-## After a Fresh Install
+## Keybindings
 
-1. Clone this repo and symlink or copy to `/etc/nixos/`
-2. Run `sudo nixos-rebuild switch --flake .#gl00m-full`
-3. Create the Hermes API key file:
+| Bind | Action |
+|------|--------|
+| `SUPER + Q` | Open terminal (kitty) |
+| `SUPER + C` | Close active window |
+| `SUPER + R` | Open app launcher (hyprlauncher) |
+| `SUPER + E` | File manager (dolphin) |
+| `SUPER + V` | Toggle floating on active window |
+| `SUPER + L` | Lock screen (hyprlock) |
+| `SUPER + M` | Exit Hyprland |
+| `SUPER + P` | Toggle pseudotile (dwindle layout) |
+| `SUPER + J` | Toggle split direction (dwindle layout) |
+| `SUPER + arrows` | Move focus in that direction |
+| `SUPER + grave` | Open log viewer (Hyprland log + system journal) |
+| `Print` | Region screenshot — drag to select area |
+| `Print` × 2 | Full screenshot (double-tap within 0.3s) |
+| Volume keys | Raise / lower / mute with OSD overlay |
+| Brightness keys | Raise / lower with OSD overlay |
+| Media keys | Next / pause / previous via playerctl |
+
+Screenshots are saved to `~/Pictures/Screenshots/`. After each shot: copied to clipboard, dialog to optionally rename. Timestamp-named screenshots are auto-deleted after 14 days on the next screenshot; renamed ones are kept permanently.
+
+---
+
+## After a fresh install
+
+1. Clone repo and link or copy to `/etc/nixos/`
+2. `sudo nixos-rebuild switch --flake .#gl00m-full`
+3. Create the Hermes API key file (not in the repo — managed manually):
    ```bash
    sudo mkdir -p /var/lib/hermes
-   sudo tee /var/lib/hermes/env << 'EOF'
-   OPENROUTER_API_KEY=your-key-here
-   EOF
+   sudo tee /var/lib/hermes/env <<< 'OPENROUTER_API_KEY=your-key-here'
    sudo chmod 600 /var/lib/hermes/env
    ```
-4. Set a wallpaper: place an image, then edit `config/hypr/hyprpaper.conf` and uncomment the three lines
+4. Add a wallpaper: put an image somewhere, edit `config/hypr/hyprpaper.conf`, uncomment the three lines and point them at the file
 
 ---
 
 ## Pending
 
-- Neovim full config (LSP, treesitter, completion, AI extensions)
-- Wallpaper selection
-- Dev tooling (Node, Python, Rust, direnv, Docker)
-- ScreenPad Plus advanced usage (asusctl profiles)
-- Workspace navigation and overview (pending nixpkgs plugin updates for Hyprland 0.54)
+- Workspace navigation and overview — hyprexpo and hyprspace both fail to compile against Hyprland 0.54.3 due to renamed internal headers in nixpkgs. Needs a nixpkgs update or an overlay.
+- Neovim config (LSP, completion, treesitter)
+- Dev tooling (direnv, language servers, Docker)
+- Wallpaper
+- ScreenPad Plus (eDP-2) configuration with asusctl
