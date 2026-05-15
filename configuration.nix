@@ -116,11 +116,10 @@ fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono
   nerd-fonts.fira-code
   nerd-fonts.symbols-only
-
+];
   # ASUS Hardware support
   services.asusd = {
   enable = true;
   enableUserService = true;
 };
-];
 }
