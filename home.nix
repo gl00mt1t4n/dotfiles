@@ -5,6 +5,7 @@
     ./modules/git.nix
     ./modules/hyprland.nix
     ./modules/waybar.nix
+    ./modules/kitty.nix
   ];
 
   home = {
