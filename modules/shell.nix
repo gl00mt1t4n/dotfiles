@@ -11,6 +11,7 @@
     #screenshots
     grim
     slurp #region selection
+    starship # terminal prompt
 
   ];
 
@@ -36,4 +37,22 @@
       cat      = "bat";
     };
   };
+
+  programs.starship = {
+	enable = true;
+	enableBashIntegration = true;
+	settings = {
+		add_newline = true;
+		character = {
+			success_symbol = "[❯](green)";
+        error_symbol = "[❯](red)";
+      };
+      directory = {
+        truncation_length = 3;
+        truncate_to_repo = true;
+      };
+    };
+  };
+
+  }
 }
