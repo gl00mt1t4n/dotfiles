@@ -7,9 +7,12 @@
     fd
     fzf
     zoxide
-    wl-clipboard
-    grim
-    slurp
+    wl-clipboard 
+    grim #screenshot
+    slurp #screenshot editor
+    brightnessctl
+    playerctl
+
   ];
 
   programs.starship = {
