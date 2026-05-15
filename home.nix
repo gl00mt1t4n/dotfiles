@@ -20,6 +20,7 @@
       git
       pavucontrol
       claude-code
+      jq
     ];
   };
 }

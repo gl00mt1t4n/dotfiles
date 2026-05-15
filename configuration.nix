@@ -50,6 +50,14 @@
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Keep only the last 10 boot generations and garbage collect weekly
+  boot.loader.systemd-boot.configurationLimit = 10;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   # System state version
   system.stateVersion = "25.11";
 
