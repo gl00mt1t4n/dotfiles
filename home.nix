@@ -19,6 +19,7 @@
       vim
       git
       pavucontrol
+      claude-code
     ];
   };
 }
