@@ -23,6 +23,7 @@
       zenity        # screenshot rename dialog
       swayosd       # OSD overlay for volume keys
       brightnessctl # direct backlight control (bypasses swayosd device selection bug)
+      libnotify     # notify-send for brightness and kbd-backlight OSD
       zen-browser
     ];
   };

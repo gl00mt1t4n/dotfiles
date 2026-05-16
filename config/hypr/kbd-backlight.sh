@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-
-# Cycles keyboard backlight through all levels: 0 (off) → 1 → 2 → 3 → 0
 DEVICE="/sys/class/leds/asus::kbd_backlight"
 
-MAX=$(cat "$DEVICE/max_brightness") || exit 1
-CURRENT=$(cat "$DEVICE/brightness") || exit 1
-NEXT=$(( (CURRENT + 1) % (MAX + 1) ))
+if [ ! -d "$DEVICE" ]; then
+    notify-send -t 3000 "Keyboard Backlight" "Not available on this hardware yet"
+    exit 1
+fi
 
-echo "$NEXT" > "$DEVICE/brightness"
+CURRENT=$(cat "$DEVICE/brightness")
+MAX=$(cat "$DEVICE/max_brightness")
+
+if [ "$CURRENT" -gt 0 ]; then
+    echo 0 > "$DEVICE/brightness"
+else
+    echo "$MAX" > "$DEVICE/brightness"
+fi

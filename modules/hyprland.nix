@@ -20,4 +20,9 @@
     source = ../config/hypr/kbd-backlight.sh;
     executable = true;
   };
+
+  home.file.".config/hypr/brightness.sh" = {
+    source = ../config/hypr/brightness.sh;
+    executable = true;
+  };
 }
