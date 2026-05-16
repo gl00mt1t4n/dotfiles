@@ -7,22 +7,22 @@
   home.file.".config/mako/config".source = ../config/mako/config;
 
   home.file.".config/hypr/view-logs.sh" = {
-    source = ../config/hypr/view-logs.sh;
+    source = ../config/hypr/scripts/view-logs.sh;
     executable = true;
   };
 
   home.file.".config/hypr/screenshot.sh" = {
-    source = ../config/hypr/screenshot.sh;
+    source = ../config/hypr/scripts/screenshot.sh;
     executable = true;
   };
 
   home.file.".config/hypr/kbd-backlight.sh" = {
-    source = ../config/hypr/kbd-backlight.sh;
+    source = ../config/hypr/scripts/kbd-backlight.sh;
     executable = true;
   };
 
   home.file.".config/hypr/brightness.sh" = {
-    source = ../config/hypr/brightness.sh;
+    source = ../config/hypr/scripts/brightness.sh;
     executable = true;
   };
 }
