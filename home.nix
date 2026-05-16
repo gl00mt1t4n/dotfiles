@@ -6,6 +6,7 @@
     ./modules/hyprland.nix
     ./modules/waybar.nix
     ./modules/kitty.nix
+    ./modules/neovim.nix
   ];
 
   home = {
@@ -15,7 +16,6 @@
     packages = with pkgs; [
       kitty
       firefox
-      neovim
       vim
       git
       pavucontrol
