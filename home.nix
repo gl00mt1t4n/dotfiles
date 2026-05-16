@@ -20,8 +20,9 @@
       git
       pavucontrol
       claude-code
-      zenity      # screenshot rename dialog
-      swayosd     # OSD overlay for volume and brightness keys
+      zenity        # screenshot rename dialog
+      swayosd       # OSD overlay for volume keys
+      brightnessctl # direct backlight control (bypasses swayosd device selection bug)
       zen-browser
     ];
   };
