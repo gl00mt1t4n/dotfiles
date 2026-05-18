@@ -22,10 +22,10 @@
 - ~/dotfiles/configuration.nix — system layer
 - ~/dotfiles/home.nix — home-manager root
 - ~/dotfiles/modules/ — shell.nix, git.nix, hyprland.nix
-- ~/dotfiles/config/ — hyprland.conf, hypridle.conf, hyprpaper.conf, caelestia/shell.json
+- ~/dotfiles/config/ — hyprland.conf, caelestia/shell.json, caelestia/wallpapers, kitty, nvim
 
 ## Desktop
-- Hyprland, Caelestia shell, Hyprlauncher (SUPER+R), Hyprlock (SUPER+L), Hypridle, Hyprpaper, Kitty
+- Hyprland compositor with Caelestia shell for launcher, lock, idle, wallpaper, notifications, OSD, dashboard, sidebar, utilities; Kitty terminal
 
 ## Pending
 - Ricing, Neovim (LSP + AI), Claude Code, asusctl, ScreenPad Plus, pipewire, fonts, wl-clipboard, Docker, Node, Python, Rust

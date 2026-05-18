@@ -48,16 +48,14 @@ dotfiles/
 ├── config/
 │   ├── hypr/
 │   │   ├── hyprland.conf        # Monitors, keybinds, window rules, animations, autostart
-│   │   ├── hypridle.conf        # Lock after 5min idle, suspend after 10min
-│   │   ├── hyprlock.conf        # Lock screen layout
-│   │   ├── hyprpaper.conf       # Wallpaper daemon config
 │   │   └── scripts/
 │   │       ├── brightness.sh    # Brightness via brightnessctl -d intel_backlight
 │   │       ├── kbd-backlight.sh # Keyboard backlight toggle (graceful failure until hardware supported)
 │   │       ├── screenshot.sh    # Print key: single = region, double-tap = fullscreen; saves + clipboard
 │   │       └── view-logs.sh     # SUPER+grave: Hyprland log + system journal in kitty
 │   ├── caelestia/
-│   │   └── shell.json           # Caelestia shell config, copied through the Nix store
+│   │   ├── shell.json           # Caelestia shell config, copied through the Nix store
+│   │   └── wallpapers/          # Repo-owned wallpapers exposed to Caelestia
 │   ├── kitty/
 │   │   └── kitty.conf           # Terminal config (font, colors, padding — pending)
 │   └── nvim/
@@ -158,8 +156,14 @@ Bash + starship prompt + zoxide + fzf. Defined in `modules/shell.nix`.
 |------|--------|
 | `SUPER+Q` | Open kitty |
 | `SUPER+C` | Close window |
-| `SUPER+R` | App launcher |
-| `SUPER+L` | Lock screen (hyprlock) |
+| `SUPER+R` | Caelestia launcher |
+| `SUPER+D` | Caelestia dashboard |
+| `SUPER+B` | Caelestia sidebar |
+| `SUPER+U` | Caelestia utilities |
+| `SUPER+X` | Caelestia session menu |
+| `SUPER+,` | Caelestia control center |
+| `SUPER+SPACE` | Caelestia overview |
+| `SUPER+L` | Lock screen via Caelestia/logind |
 | `SUPER+V` | Toggle floating |
 | `SUPER+arrows` | Move focus |
 | `SUPER+grave` | Log viewer (Hyprland + journal) |
@@ -182,6 +186,7 @@ Screenshots → `~/Pictures/Screenshots/`. Timestamp-named files auto-deleted af
 | `hermes-agent` | NousResearch Hermes AI agent (NixOS module) |
 | `zen-browser` | Zen Browser (not in nixpkgs; standalone flake) |
 | `quickshell` | Runtime used to build/run the local Caelestia shell source |
+| `caelestia-cli` | Pinned control CLI for Caelestia shell IPC, wallpaper, schemes, screenshots, recording |
 
 `nixpkgs.legacyPackages` does not support overlays — `pkgs` is constructed manually via `import nixpkgs { inherit system; overlays = [...]; }`.
 
@@ -191,13 +196,14 @@ Caelestia itself is not an external flake input. The source lives in `caelestia/
 
 ## Caelestia shell
 
-The desktop shell is vendored from [caelestia-dots/shell](https://github.com/caelestia-dots/shell), built locally with QuickShell + Qt6. It owns the bar, notifications, OSD, launcher surfaces, and desktop shell UI. Old standalone Waybar, Mako, swayosd, and handwritten QuickShell configs are intentionally not part of this repo anymore.
+The desktop shell is vendored from [caelestia-dots/shell](https://github.com/caelestia-dots/shell), built locally with QuickShell + Qt6. It owns the bar, notifications, OSD, launcher, lock screen, idle policy, wallpaper layer, and desktop shell UI. Old standalone Waybar, Mako, swayosd, Hyprlauncher, Hyprlock, Hypridle, Hyprpaper, and handwritten QuickShell configs are intentionally not part of the active setup anymore.
 
 **Customization:**
 | Change | How |
 |--------|-----|
 | Layout, components, theme | Edit `caelestia/**/*.qml` → `make user` or `make full` |
 | Shell settings (fonts, spacing, transparency) | Edit `config/caelestia/shell.json` → `make user` or `make full` |
+| Wallpapers | Add images under `config/caelestia/wallpapers/` → select from Caelestia launcher/control center |
 | Per-monitor overrides | `config/caelestia/monitors/<screen-name>/shell.json` |
 | Advanced design tokens | `config/caelestia/shell-tokens.json` |
 | C++ plugin (new backend features) | Edit `caelestia/plugin/src/...` → `make user` |
@@ -223,7 +229,7 @@ git commit -m "update caelestia source"
    echo 'OPENROUTER_API_KEY=your-key' | sudo tee /var/lib/hermes/env
    sudo chmod 600 /var/lib/hermes/env
    ```
-4. Add a tracked wallpaper under `config/hypr/` and point `config/hypr/hyprpaper.conf` at the Home Manager-managed path.
+4. Put any personal wallpapers under `config/caelestia/wallpapers/` and select one from Caelestia after first login.
 
 Not tracked by Nix (must recreate manually after fresh install):
 - `/var/lib/hermes/env` — API key

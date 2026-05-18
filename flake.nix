@@ -12,13 +12,18 @@
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    caelestia-cli = {
+      url = "github:caelestia-dots/cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.caelestia-shell.follows = "";
+    };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, hermes-agent, quickshell, zen-browser, ... }:
+  outputs = { self, nixpkgs, home-manager, hermes-agent, quickshell, caelestia-cli, zen-browser, ... }:
   let
     system = "x86_64-linux";
     overlays = [
@@ -38,7 +43,8 @@
         withX11 = false;
         withI3 = false;
       };
-      caelestia-cli = null;
+      caelestia-cli = caelestia-cli.packages.${system}.default;
+      withCli = true;
     };
 
     homeModules = [ ./home.nix ];

@@ -28,14 +28,12 @@
     vim
     home-manager
     gnumake
-    hyprlauncher
     blueman
-    hyprlock
-    hypridle
-    hyprpaper
     asusctl
     supergfxctl
     codex
+    spotify
+    spicetify-cli
   ];
 
   # Shell

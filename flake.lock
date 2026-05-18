@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "caelestia-cli": {
+      "inputs": {
+        "caelestia-shell": [],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778990990,
+        "narHash": "sha256-afaXzQEo8IiNgZbNGvOiL8yFLQwgXCwmccawJODCKh0=",
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "rev": "04d286eaffa8298fd1d7202c461ca7da33173da8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -226,6 +247,7 @@
     },
     "root": {
       "inputs": {
+        "caelestia-cli": "caelestia-cli",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",

@@ -5,11 +5,11 @@
 ## Ricing & Visual
 
 - [ ] **kitty.conf** — JetBrainsMono Nerd Font size 13, Catppuccin Mocha colors, padding, cursor shape
-- [ ] **hyprpaper** — animated wallpaper via `swww` (supports GIF/MP4-style loops) or static via hyprpaper; source from ~/Pictures or repo asset
-- [ ] **hyprlock** — blur background, Catppuccin colors, clock widget, password field with avatar
+- [ ] **Caelestia wallpaper set** — replace the placeholder repo wallpaper in `config/caelestia/wallpapers/` with real images
+- [ ] **Caelestia lock tuning** — profile image, notification visibility, fingerprint only if fprintd is configured
 - [ ] **GTK theming** — catppuccin-gtk + papirus-icon-theme + catppuccin-cursors; wire via `gtk.enable`, `home.pointerCursor` in home.nix
 - [ ] **Hyprland animations** — tune bezier curves, window open/close/workspace slide animations in hyprland.conf
-- [ ] **App launcher** — check what's currently bound in hyprland.conf; if wofi/rofi, theme it to match Catppuccin
+- [ ] **Caelestia launcher tuning** — favorite apps, hidden apps, action list, wallpaper/scheme entries
 
 ---
 
@@ -33,7 +33,7 @@
 
 ## Apps & Daemons
 
-- [ ] **Spotify** — add `spotify` to home.nix packages (`allowUnfree` already set); optionally add `spotifyd` daemon + `spotify-player` TUI for terminal control
+- [ ] **Spotify/Spicetify** — Spotify and spicetify-cli are installed; vendor Caelestia's Spicetify theme before enabling `spicetify apply` declaratively
 - [ ] **Clipboard manager** — add `cliphist` + `wl-clipboard`; bind `SUPER+V` to clipboard history picker in hyprland.conf
 - [ ] **Screenshot improvements** — current `screenshot.sh` uses basic tools; consider `grimblast` for region/window/monitor modes with annotation
 - [ ] **Webull** — Linux availability unclear; try via Bottles (Wine wrapper in a Flatpak sandbox) first

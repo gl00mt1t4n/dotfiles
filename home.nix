@@ -17,11 +17,13 @@
       kitty
       firefox
       git
+      thunar
       pavucontrol
       claude-code
       zenity        # screenshot rename dialog
       brightnessctl # direct backlight control
       libnotify     # notify-send for kbd-backlight script
+      playerctl
       zen-browser
     ];
   };

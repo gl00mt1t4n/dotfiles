@@ -1,1 +1,180 @@
-{}
+{
+  "enabled": true,
+  "appearance": {
+    "font": {
+      "family": {
+        "sans": "Rubik",
+        "mono": "CaskaydiaCove NF",
+        "material": "Material Symbols Rounded",
+        "clock": "Rubik"
+      },
+      "size": {
+        "scale": 1.04
+      }
+    },
+    "rounding": {
+      "scale": 1
+    },
+    "spacing": {
+      "scale": 1
+    },
+    "padding": {
+      "scale": 1
+    },
+    "transparency": {
+      "enabled": true,
+      "base": 0.88,
+      "layers": 0.45
+    }
+  },
+  "general": {
+    "showOverFullscreen": false,
+    "apps": {
+      "terminal": ["kitty"],
+      "audio": ["pavucontrol"],
+      "playback": ["mpv"],
+      "explorer": ["thunar"]
+    },
+    "idle": {
+      "lockBeforeSleep": true,
+      "inhibitWhenAudio": true,
+      "timeouts": [
+        {
+          "timeout": 300,
+          "idleAction": "lock"
+        },
+        {
+          "timeout": 600,
+          "idleAction": ["systemctl", "suspend"]
+        }
+      ]
+    }
+  },
+  "bar": {
+    "status": {
+      "showAudio": true,
+      "showMicrophone": false,
+      "showNetwork": true,
+      "showWifi": true,
+      "showBluetooth": true,
+      "showBattery": true,
+      "showLockStatus": true
+    },
+    "clock": {
+      "showDate": true,
+      "showIcon": true
+    },
+    "workspaces": {
+      "shown": 7,
+      "showWindows": true,
+      "occupiedBg": true
+    }
+  },
+  "background": {
+    "enabled": true,
+    "wallpaperEnabled": true,
+    "desktopClock": {
+      "enabled": false
+    },
+    "visualiser": {
+      "enabled": false
+    }
+  },
+  "dashboard": {
+    "showDashboard": true,
+    "showMedia": true,
+    "showPerformance": true,
+    "showWeather": false
+  },
+  "launcher": {
+    "maxShown": 8,
+    "maxWallpapers": 9,
+    "favouriteApps": [
+      "kitty.desktop",
+      "zen-browser.desktop",
+      "firefox.desktop",
+      "spotify.desktop",
+      "thunar.desktop"
+    ],
+    "useFuzzy": {
+      "apps": true,
+      "actions": true,
+      "schemes": true,
+      "variants": true,
+      "wallpapers": true
+    }
+  },
+  "lock": {
+    "enableFprint": false,
+    "hideNotifs": false
+  },
+  "notifs": {
+    "expire": false,
+    "defaultExpireTimeout": 5000
+  },
+  "osd": {
+    "enabled": true,
+    "enableBrightness": true,
+    "enableMicrophone": false,
+    "hideDelay": 2000
+  },
+  "paths": {
+    "wallpaperDir": "~/.config/caelestia/wallpapers",
+    "lyricsDir": "~/Music/lyrics"
+  },
+  "services": {
+    "audioIncrement": 0.05,
+    "brightnessIncrement": 0.05,
+    "maxVolume": 1.0,
+    "defaultPlayer": "Spotify",
+    "smartScheme": true,
+    "showLyrics": false,
+    "useTwelveHourClock": true
+  },
+  "session": {
+    "enabled": true,
+    "vimKeybinds": false
+  },
+  "sidebar": {
+    "enabled": true
+  },
+  "utilities": {
+    "enabled": true,
+    "toasts": {
+      "nowPlaying": true
+    },
+    "vpn": {
+      "enabled": false
+    },
+    "quickToggles": [
+      {
+        "id": "wifi",
+        "enabled": true
+      },
+      {
+        "id": "bluetooth",
+        "enabled": true
+      },
+      {
+        "id": "mic",
+        "enabled": true
+      },
+      {
+        "id": "settings",
+        "enabled": true
+      },
+      {
+        "id": "gameMode",
+        "enabled": true
+      },
+      {
+        "id": "dnd",
+        "enabled": true
+      },
+      {
+        "id": "vpn",
+        "enabled": false
+      }
+    ]
+  }
+}
