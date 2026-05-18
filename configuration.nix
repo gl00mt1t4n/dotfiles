@@ -19,7 +19,7 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" "hermes" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "hermes" "video" "i2c" ];
   };
 
   # Packages
@@ -42,6 +42,10 @@
     enable = true;
     xwayland.enable = true;
   };
+
+  # xdg-desktop-portal-gtk provides file pickers for Firefox, Thunar, and other GTK apps
+  # hyprland portal handles screencopy; gtk portal handles everything else
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

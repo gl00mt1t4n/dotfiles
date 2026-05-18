@@ -119,7 +119,7 @@
     "hideDelay": 2000
   },
   "paths": {
-    "wallpaperDir": "~/.config/caelestia/wallpapers",
+    "wallpaperDir": "~/Pictures/Wallpapers",
     "lyricsDir": "~/Music/lyrics"
   },
   "services": {
