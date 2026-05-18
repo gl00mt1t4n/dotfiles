@@ -8,17 +8,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hermes-agent.url = "github:NousResearch/hermes-agent";
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    caelestia = {
-      url = "github:gl00mt1t4n/caelestia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { nixpkgs, home-manager, hermes-agent, zen-browser, caelestia, ... }:
+  outputs = { self, nixpkgs, home-manager, hermes-agent, quickshell, zen-browser, ... }:
   let
     system = "x86_64-linux";
     overlays = [
@@ -26,22 +26,28 @@
         zen-browser = zen-browser.packages.${system}.default;
       })
     ];
-    pkgs = import nixpkgs { inherit system overlays; };
+    pkgs = import nixpkgs {
+      inherit system overlays;
+      config.allowUnfree = true;
+    };
 
-    # Override the binary's -p flag to load QML from the live submodule instead
-    # of the Nix store. Edits to caelestia/**/*.qml hot-reload without make user.
-    caelestia-shell-local = caelestia.packages.${system}.caelestia-shell.overrideAttrs (old: {
-      postInstall = builtins.replaceStrings
-        [ ''--add-flags "-p $out/share/caelestia-shell"'' ]
-        [ ''--add-flags "-p /home/gl00m/dotfiles/caelestia"'' ]
-        old.postInstall;
-    });
+    caelestiaShell = pkgs.callPackage ./caelestia/nix {
+      rev = self.rev or self.dirtyRev or "dirty";
+      stdenv = pkgs.clangStdenv;
+      quickshell = quickshell.packages.${system}.default.override {
+        withX11 = false;
+        withI3 = false;
+      };
+      caelestia-cli = null;
+    };
 
-    caelestiaHmModules = [
-      caelestia.homeManagerModules.default
-      { programs.caelestia.package = caelestia-shell-local; }
-    ];
+    homeModules = [ ./home.nix ];
+    homeExtraSpecialArgs = { inherit caelestiaShell; };
   in {
+    packages.${system} = {
+      caelestia-shell = caelestiaShell;
+      default = caelestiaShell;
+    };
 
     # System only
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -56,7 +62,8 @@
     # User only
     homeConfigurations.gl00m = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      modules = [ ./home.nix ] ++ caelestiaHmModules;
+      extraSpecialArgs = homeExtraSpecialArgs;
+      modules = homeModules;
     };
 
     # Both unified
@@ -70,7 +77,8 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.gl00m = { imports = [ ./home.nix ] ++ caelestiaHmModules; };
+          home-manager.extraSpecialArgs = homeExtraSpecialArgs;
+          home-manager.users.gl00m = { imports = homeModules; };
         }
       ];
     };

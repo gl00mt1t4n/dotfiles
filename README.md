@@ -33,16 +33,15 @@ dotfiles/
 ├── home.nix                     # Imports all user modules + home.packages list
 ├── TODO.md                      # Planned work and completed items
 │
-├── caelestia/                   # Git submodule — fork of caelestia-dots/shell
-│   │                            # QML files here are loaded directly at runtime (hot-reload)
-│   │                            # C++ plugin changes require make user to recompile
+├── caelestia/                   # Vendored Caelestia shell source, built by the top-level flake
+│   │                            # QML/C++ changes become active after make user or make full
 │   └── ...                      # Full source: modules/, services/, components/, plugin/
 │
 ├── modules/
 │   ├── shell.nix                # Bash, starship, zoxide, fzf, aliases, nixrebuild
 │   ├── git.nix                  # Git identity, delta pager, gh CLI
 │   ├── hyprland.nix             # Symlinks all hypr + desktop configs into ~/.config/
-│   ├── caelestia.nix            # Enables caelestia shell; symlinks config/caelestia → ~/.config/caelestia
+│   ├── caelestia.nix            # Installs locally built caelestia shell; links config/caelestia
 │   ├── kitty.nix                # Symlinks kitty config
 │   └── neovim.nix               # programs.neovim: plugins, initLua, no ruby/python3
 │
@@ -58,7 +57,7 @@ dotfiles/
 │   │       ├── screenshot.sh    # Print key: single = region, double-tap = fullscreen; saves + clipboard
 │   │       └── view-logs.sh     # SUPER+grave: Hyprland log + system journal in kitty
 │   ├── caelestia/
-│   │   └── shell.json           # Caelestia shell config (symlinked to ~/.config/caelestia/)
+│   │   └── shell.json           # Caelestia shell config, copied through the Nix store
 │   ├── kitty/
 │   │   └── kitty.conf           # Terminal config (font, colors, padding — pending)
 │   └── nvim/
@@ -182,38 +181,34 @@ Screenshots → `~/Pictures/Screenshots/`. Timestamp-named files auto-deleted af
 | `home-manager` | User environment management |
 | `hermes-agent` | NousResearch Hermes AI agent (NixOS module) |
 | `zen-browser` | Zen Browser (not in nixpkgs; standalone flake) |
-| `caelestia` | Desktop shell — fetched from `github:gl00mt1t4n/caelestia-shell` |
+| `quickshell` | Runtime used to build/run the local Caelestia shell source |
 
 `nixpkgs.legacyPackages` does not support overlays — `pkgs` is constructed manually via `import nixpkgs { inherit system; overlays = [...]; }`.
 
-The `caelestia` package is overridden in `flake.nix` to load QML files from `/home/gl00m/dotfiles/caelestia` (the local submodule) instead of the Nix store. This means any edit to a `.qml` file hot-reloads instantly without running `make user`. C++ plugin changes require pushing to the fork, running `make update`, then `make user`.
+Caelestia itself is not an external flake input. The source lives in `caelestia/` and the top-level flake builds it into the Nix store. This keeps rebuilds reproducible from this repository: edit QML or C++, then run `make user` or `make full` to activate the change.
 
 ---
 
 ## Caelestia shell
 
-The desktop shell is [caelestia-dots/shell](https://github.com/caelestia-dots/shell) (fork at `gl00mt1t4n/caelestia-shell`), built with QuickShell + Qt6. It replaces waybar (bar), mako (notifications), and swayosd (OSD).
+The desktop shell is vendored from [caelestia-dots/shell](https://github.com/caelestia-dots/shell), built locally with QuickShell + Qt6. It replaces waybar (bar), mako (notifications), and swayosd (OSD).
 
 **Customization:**
 | Change | How |
 |--------|-----|
-| Layout, components, theme | Edit `caelestia/**/*.qml` → QuickShell hot-reloads instantly |
-| Shell settings (fonts, spacing, transparency) | Edit `config/caelestia/shell.json` → `systemctl --user restart caelestia` |
+| Layout, components, theme | Edit `caelestia/**/*.qml` → `make user` or `make full` |
+| Shell settings (fonts, spacing, transparency) | Edit `config/caelestia/shell.json` → `make user` or `make full` |
 | Per-monitor overrides | `config/caelestia/monitors/<screen-name>/shell.json` |
 | Advanced design tokens | `config/caelestia/shell-tokens.json` |
 | C++ plugin (new backend features) | Edit `caelestia/plugin/src/...` → `make user` |
 
-**Pushing changes to the fork:**
+**Updating Caelestia from upstream:**
 ```bash
-cd ~/dotfiles/caelestia
-git add .
-git commit -m "describe change"
-git push
-
-# then update the submodule ref in the parent repo
 cd ~/dotfiles
+# merge/copy upstream Caelestia changes into caelestia/, review the diff,
+# then commit them with the rest of the dotfiles repo
 git add caelestia
-git commit -m "update caelestia submodule"
+git commit -m "update caelestia source"
 ```
 
 ---
@@ -221,15 +216,14 @@ git commit -m "update caelestia submodule"
 ## Fresh install
 
 1. Clone repo
-2. `git submodule update --init` — populates the `caelestia/` submodule
-3. `sudo nixos-rebuild switch --flake .#gl00m-full`
-4. Create Hermes API key (not in repo):
+2. `sudo nixos-rebuild switch --flake .#gl00m-full`
+3. Create Hermes API key (not in repo):
    ```bash
    sudo mkdir -p /var/lib/hermes
    echo 'OPENROUTER_API_KEY=your-key' | sudo tee /var/lib/hermes/env
    sudo chmod 600 /var/lib/hermes/env
    ```
-5. Add a wallpaper: place image anywhere, edit `config/hypr/hyprpaper.conf` with the path
+4. Add a wallpaper: place image anywhere, edit `config/hypr/hyprpaper.conf` with the path
 
 Not tracked by Nix (must recreate manually after fresh install):
 - `/var/lib/hermes/env` — API key

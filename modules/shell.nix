@@ -37,7 +37,7 @@
       eval "$(zoxide init bash)"
       eval "$(fzf --bash)"
       nixrebuild() {
-        local dotfiles="/home/gl00m/dotfiles"
+        local dotfiles="''${DOTFILES_DIR:-$HOME/dotfiles}"
         local dry_cmd build_cmd
 
         case "$1" in
@@ -66,9 +66,9 @@
       }
     '';
     shellAliases = {
-      dotfiles = "cd /home/gl00m/dotfiles";
-      nixconf  = "sudo nvim /home/gl00m/dotfiles/configuration.nix";
-      hyprconf = "nvim /home/gl00m/dotfiles/config/hypr/hyprland.conf";
+      dotfiles = "cd \${DOTFILES_DIR:-$HOME/dotfiles}";
+      nixconf  = "sudo nvim \${DOTFILES_DIR:-$HOME/dotfiles}/configuration.nix";
+      hyprconf = "nvim \${DOTFILES_DIR:-$HOME/dotfiles}/config/hypr/hyprland.conf";
       ls       = "eza --icons";
       ll       = "eza -la --icons";
       cat      = "bat";

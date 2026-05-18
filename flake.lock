@@ -1,51 +1,5 @@
 {
   "nodes": {
-    "caelestia": {
-      "inputs": {
-        "caelestia-cli": "caelestia-cli",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "quickshell": "quickshell"
-      },
-      "locked": {
-        "lastModified": 1778986249,
-        "narHash": "sha256-6vIBRLIy41LDrm/ahTcrEj6pBB+oji7bP/5RY9Or0GA=",
-        "owner": "gl00mt1t4n",
-        "repo": "caelestia-shell",
-        "rev": "cf18cea3dad28ddda2f151b1b42a66f2fba1f84a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gl00mt1t4n",
-        "repo": "caelestia-shell",
-        "type": "github"
-      }
-    },
-    "caelestia-cli": {
-      "inputs": {
-        "caelestia-shell": [
-          "caelestia"
-        ],
-        "nixpkgs": [
-          "caelestia",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1778644647,
-        "narHash": "sha256-iQIu4b5by8B3qKeigungSIgRoJg9HS1NiIZwqIbCGYk=",
-        "owner": "caelestia-dots",
-        "repo": "cli",
-        "rev": "2ce6213698d1cfa15b4b067d35c3cda634f443dd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "caelestia-dots",
-        "repo": "cli",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -253,7 +207,6 @@
     "quickshell": {
       "inputs": {
         "nixpkgs": [
-          "caelestia",
           "nixpkgs"
         ]
       },
@@ -273,10 +226,10 @@
     },
     "root": {
       "inputs": {
-        "caelestia": "caelestia",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
+        "quickshell": "quickshell",
         "zen-browser": "zen-browser"
       }
     },

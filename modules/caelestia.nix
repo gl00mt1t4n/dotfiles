@@ -1,14 +1,9 @@
-{ config, ... }:
+{ caelestiaShell, ... }:
 {
-  programs.caelestia = {
-    enable = true;
-    systemd.enable = false;  # autostarted via exec-once in hyprland.conf instead
-    settings = {};            # empty → module generates no xdg.configFile entries
-  };
+  home.packages = [ caelestiaShell ];
 
-  # Mirror the rest of dotfiles: dotfiles/config/caelestia → ~/.config/caelestia
-  # Live symlink so editing shell.json or tokens takes effect without make user.
+  # Rebuilds copy repo config into the Nix store, keeping runtime state reproducible.
   xdg.configFile."caelestia" = {
-    source = config.lib.file.mkOutOfStoreSymlink "/home/gl00m/dotfiles/config/caelestia";
+    source = ../config/caelestia;
   };
 }
