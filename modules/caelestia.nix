@@ -22,11 +22,16 @@ in
 
   home.activation.seedCaelestiaWallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     wallpaper_state="$HOME/.local/state/caelestia/wallpaper/path.txt"
-    default_wallpaper="$HOME/.config/caelestia/wallpapers/default.png"
+    wallpaper_dir="$HOME/Pictures/Wallpapers"
+
+    mkdir -p "$wallpaper_dir"
 
     if [ ! -s "$wallpaper_state" ] || [ ! -e "$(cat "$wallpaper_state" 2>/dev/null)" ]; then
-      mkdir -p "$(dirname "$wallpaper_state")"
-      printf '%s\n' "$default_wallpaper" > "$wallpaper_state"
+      first_wallpaper="$(find "$wallpaper_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | head -n1)"
+      if [ -n "$first_wallpaper" ]; then
+        mkdir -p "$(dirname "$wallpaper_state")"
+        printf '%s\n' "$first_wallpaper" > "$wallpaper_state"
+      fi
     fi
   '';
 }
