@@ -35,6 +35,7 @@
     hyprpaper
     asusctl
     supergfxctl
+    codex
   ];
 
   # Shell
