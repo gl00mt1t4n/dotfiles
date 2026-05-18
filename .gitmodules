@@ -1,0 +1,3 @@
+[submodule "caelestia"]
+	path = caelestia
+	url = https://github.com/gl00mt1t4n/caelestia-shell.git

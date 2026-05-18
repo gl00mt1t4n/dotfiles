@@ -4,7 +4,7 @@
     ./modules/shell.nix
     ./modules/git.nix
     ./modules/hyprland.nix
-    ./modules/waybar.nix
+    ./modules/caelestia.nix
     ./modules/kitty.nix
     ./modules/neovim.nix
   ];
@@ -21,9 +21,8 @@
       pavucontrol
       claude-code
       zenity        # screenshot rename dialog
-      swayosd       # OSD overlay for volume keys
-      brightnessctl # direct backlight control (bypasses swayosd device selection bug)
-      libnotify     # notify-send for brightness and kbd-backlight OSD
+      brightnessctl # direct backlight control
+      libnotify     # notify-send for kbd-backlight script
       zen-browser
     ];
   };

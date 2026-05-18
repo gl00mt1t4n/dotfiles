@@ -33,7 +33,6 @@
     hyprlock
     hypridle
     hyprpaper
-    mako
     asusctl
     supergfxctl
   ];
@@ -66,8 +65,8 @@
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
-  # Waybar enabling
-  programs.waybar.enable = true;
+  # i2c access for ddcutil (caelestia uses this for external monitor brightness)
+  hardware.i2c.enable = true;
 
   # Hermes Agent
   services.hermes-agent = {
@@ -114,6 +113,9 @@
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
     nerd-fonts.symbols-only
+    nerd-fonts.caskaydia-cove  # caelestia monospace
+    material-symbols            # caelestia icon font
+    rubik                       # caelestia sans
   ];
 
   # Kernel (6.10+ required for full ASUS support)
