@@ -47,11 +47,16 @@
       withCli = true;
     };
 
+    caelestiaSpotify = pkgs.callPackage ./pkgs/caelestia-spotify.nix {
+      theme = ./config/spicetify/Themes/caelestia;
+    };
+
     homeModules = [ ./home.nix ];
-    homeExtraSpecialArgs = { inherit caelestiaShell; };
+    homeExtraSpecialArgs = { inherit caelestiaShell caelestiaSpotify; };
   in {
     packages.${system} = {
       caelestia-shell = caelestiaShell;
+      spotify-caelestia = caelestiaSpotify;
       default = caelestiaShell;
     };
 

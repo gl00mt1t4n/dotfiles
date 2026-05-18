@@ -32,8 +32,6 @@
     asusctl
     supergfxctl
     codex
-    spotify
-    spicetify-cli
   ];
 
   # Shell

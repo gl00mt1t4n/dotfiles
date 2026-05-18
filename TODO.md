@@ -33,7 +33,7 @@
 
 ## Apps & Daemons
 
-- [ ] **Spotify/Spicetify** — Spotify and spicetify-cli are installed; vendor Caelestia's Spicetify theme before enabling `spicetify apply` declaratively
+- [ ] **Spotify/Spicetify polish** — Caelestia theme is vendored and applied at build time; next tune color.ini against the active Caelestia palette
 - [ ] **Clipboard manager** — add `cliphist` + `wl-clipboard`; bind `SUPER+V` to clipboard history picker in hyprland.conf
 - [ ] **Screenshot improvements** — current `screenshot.sh` uses basic tools; consider `grimblast` for region/window/monitor modes with annotation
 - [ ] **Webull** — Linux availability unclear; try via Bottles (Wine wrapper in a Flatpak sandbox) first

@@ -5,6 +5,7 @@
     ./modules/git.nix
     ./modules/hyprland.nix
     ./modules/caelestia.nix
+    ./modules/spicetify.nix
     ./modules/kitty.nix
     ./modules/neovim.nix
   ];

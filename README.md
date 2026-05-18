@@ -56,6 +56,8 @@ dotfiles/
 │   ├── caelestia/
 │   │   ├── shell.json           # Caelestia shell config, copied through the Nix store
 │   │   └── wallpapers/          # Repo-owned wallpapers exposed to Caelestia
+│   ├── spicetify/
+│   │   └── Themes/caelestia/    # Vendored Caelestia Spotify theme
 │   ├── kitty/
 │   │   └── kitty.conf           # Terminal config (font, colors, padding — pending)
 │   └── nvim/
@@ -207,6 +209,8 @@ The desktop shell is vendored from [caelestia-dots/shell](https://github.com/cae
 | Per-monitor overrides | `config/caelestia/monitors/<screen-name>/shell.json` |
 | Advanced design tokens | `config/caelestia/shell-tokens.json` |
 | C++ plugin (new backend features) | Edit `caelestia/plugin/src/...` → `make user` |
+
+Spotify is installed as a local `spotify-caelestia` package. The package copies the pinned Nixpkgs Spotify build during the Nix build and applies the vendored Spicetify CSS from `config/spicetify/Themes/caelestia`, so the themed client does not depend on mutating the immutable Nix store after activation.
 
 **Updating Caelestia from upstream:**
 ```bash
