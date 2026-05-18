@@ -8,9 +8,7 @@
 - [ ] **hyprpaper** — animated wallpaper via `swww` (supports GIF/MP4-style loops) or static via hyprpaper; source from ~/Pictures or repo asset
 - [ ] **hyprlock** — blur background, Catppuccin colors, clock widget, password field with avatar
 - [ ] **GTK theming** — catppuccin-gtk + papirus-icon-theme + catppuccin-cursors; wire via `gtk.enable`, `home.pointerCursor` in home.nix
-- [ ] **Waybar polish** — Catppuccin Mocha colors, workspace indicators (active/occupied/empty visual states), round corners, modules: clock, battery, network, volume, workspaces
 - [ ] **Hyprland animations** — tune bezier curves, window open/close/workspace slide animations in hyprland.conf
-- [ ] **Mako** — style notifications: Catppuccin colors, rounded corners, icon support, timeout per urgency level
 - [ ] **App launcher** — check what's currently bound in hyprland.conf; if wofi/rofi, theme it to match Catppuccin
 
 ---
@@ -19,7 +17,6 @@
 
 - [ ] **Hyprspace** — workspace overview plugin (Mission Control / Activities style); replaces or complements current workspace binds
 - [ ] **Smart workspace script** — move to next WS, auto-open launcher if workspace is empty
-- [ ] **Waybar workspace click-to-switch** — make waybar workspace pills clickable
 - [ ] **Second screen (eDP-2)** — currently hard-disabled; plan workspace routing before re-enabling (which workspaces go where, primary/secondary behavior, hotplug handling)
 - [ ] **Per-monitor workspace config** — once eDP-2 is re-enabled: assign workspaces 1-5 to eDP-1, 6-10 to eDP-2
 
@@ -69,9 +66,9 @@
 - [x] Volume keys — F1/F2/F3 binds for Fn Lock keysyms
 - [x] asusd crash at boot — tmpfiles rule creates /etc/asusd
 - [x] Brightness control — intel_backlight udev rule + brightness.sh with -d flag
-- [x] Brightness OSD — notify-send via mako with synchronous hint
+- [x] Brightness OSD — handled by Caelestia brightness monitoring
 - [x] Zen Browser — flake input + overlay in flake.nix
-- [x] Keyboard backlight graceful failure — mako notification instead of silent error
+- [x] Keyboard backlight graceful failure — desktop notification instead of silent error
 - [x] Neovim basic config — nvim-tree, bufferline, catppuccin-mocha, keymaps
 - [x] Scripts reorganized — moved to config/hypr/scripts/
 - [x] GNOME leftover cleanup — removed ~15 orphaned config/data directories

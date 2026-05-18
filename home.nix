@@ -16,7 +16,6 @@
     packages = with pkgs; [
       kitty
       firefox
-      vim
       git
       pavucontrol
       claude-code

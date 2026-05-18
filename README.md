@@ -16,7 +16,7 @@ sudo nixos-rebuild switch --flake .#gl00m-full
 - `eDP-2` — ScreenPad Plus (secondary screen below keyboard), currently disabled in hyprland.conf; needs workspace routing plan before re-enabling
 - Keyboard sends F1–F6 keysyms by default (Fn Lock active) — both F-key and XF86 binds exist in hyprland.conf
 - Backlight: `intel_backlight` is the correct device; `card1-eDP-2-backlight` also exists but writes to the disabled screen. A udev rule scopes backlight group access to `intel_backlight` only.
-- `asus::kbd_backlight` does not exist in `/sys/class/leds/` on this model — keyboard backlight software control not yet available; shows a mako notification on keypress instead of silently failing
+- `asus::kbd_backlight` does not exist in `/sys/class/leds/` on this model — keyboard backlight software control not yet available; shows a desktop notification on keypress instead of silently failing
 - ASUS services (`asusd`) require `/etc/asusd/` to exist — created via `systemd.tmpfiles.rules`
 
 ---
@@ -191,7 +191,7 @@ Caelestia itself is not an external flake input. The source lives in `caelestia/
 
 ## Caelestia shell
 
-The desktop shell is vendored from [caelestia-dots/shell](https://github.com/caelestia-dots/shell), built locally with QuickShell + Qt6. It replaces waybar (bar), mako (notifications), and swayosd (OSD).
+The desktop shell is vendored from [caelestia-dots/shell](https://github.com/caelestia-dots/shell), built locally with QuickShell + Qt6. It owns the bar, notifications, OSD, launcher surfaces, and desktop shell UI. Old standalone Waybar, Mako, swayosd, and handwritten QuickShell configs are intentionally not part of this repo anymore.
 
 **Customization:**
 | Change | How |
@@ -223,7 +223,7 @@ git commit -m "update caelestia source"
    echo 'OPENROUTER_API_KEY=your-key' | sudo tee /var/lib/hermes/env
    sudo chmod 600 /var/lib/hermes/env
    ```
-4. Add a wallpaper: place image anywhere, edit `config/hypr/hyprpaper.conf` with the path
+4. Add a tracked wallpaper under `config/hypr/` and point `config/hypr/hyprpaper.conf` at the Home Manager-managed path.
 
 Not tracked by Nix (must recreate manually after fresh install):
 - `/var/lib/hermes/env` — API key
