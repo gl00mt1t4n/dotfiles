@@ -65,6 +65,9 @@
   # i2c access for ddcutil (caelestia uses this for external monitor brightness)
   hardware.i2c.enable = true;
 
+  # UPower — required for caelestia battery status and power profile switching
+  services.upower.enable = true;
+
   # Hermes Agent
   services.hermes-agent = {
     enable = true;
