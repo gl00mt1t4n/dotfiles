@@ -67,10 +67,22 @@
     ];
   };
 
+  home.file.".local/bin/zen-new-window" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      if [ "$#" -gt 0 ]; then
+        exec zen --new-window "$@"
+      fi
+
+      exec zen --blank-window
+    '';
+  };
+
   xdg.desktopEntries.zen = {
     name = "Zen Browser";
     genericName = "Web Browser";
-    exec = "zen --new-window %U";
+    exec = "${config.home.homeDirectory}/.local/bin/zen-new-window %U";
     icon = "zen";
     terminal = false;
     categories = [ "Network" "WebBrowser" ];
@@ -89,7 +101,7 @@
     actions = {
       new-window = {
         name = "New Window";
-        exec = "zen --new-window %U";
+        exec = "${config.home.homeDirectory}/.local/bin/zen-new-window";
       };
       new-private-window = {
         name = "New Private Window";
