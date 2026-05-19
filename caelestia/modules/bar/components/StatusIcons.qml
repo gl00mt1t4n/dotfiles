@@ -15,6 +15,7 @@ StyledRect {
 
     property color colour: Colours.palette.m3secondary
     readonly property alias items: iconColumn
+    readonly property int statusIconSize: Tokens.font.size.large
 
     color: Colours.tPalette.m3surfaceContainer
     radius: Tokens.rounding.full
@@ -53,6 +54,7 @@ StyledRect {
                         scale: Hypr.capsLock ? 1 : 0.5
                         opacity: Hypr.capsLock ? 1 : 0
 
+                        font.pointSize: root.statusIconSize
                         text: "keyboard_capslock_badge"
                         color: root.colour
 
@@ -84,6 +86,7 @@ StyledRect {
                         scale: Hypr.numLock ? 1 : 0.5
                         opacity: Hypr.numLock ? 1 : 0
 
+                        font.pointSize: root.statusIconSize
                         text: "looks_one"
                         color: root.colour
 
@@ -110,6 +113,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
+                font.pointSize: root.statusIconSize
                 text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
                 color: root.colour
             }
@@ -122,6 +126,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
+                font.pointSize: root.statusIconSize
                 text: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
                 color: root.colour
             }
@@ -147,6 +152,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
+                font.pointSize: root.statusIconSize
                 text: Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
                 color: root.colour
             }
@@ -159,6 +165,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
+                font.pointSize: root.statusIconSize
                 text: "cable"
                 color: root.colour
             }
@@ -177,6 +184,7 @@ StyledRect {
                 // Bluetooth icon
                 MaterialIcon {
                     animate: true
+                    font.pointSize: root.statusIconSize
                     text: {
                         if (!Bluetooth.defaultAdapter?.enabled) // qmllint disable unresolved-type
                             return "bluetooth_disabled";
@@ -187,42 +195,6 @@ StyledRect {
                     color: root.colour
                 }
 
-                // Connected bluetooth devices
-                Repeater {
-                    model: ScriptModel {
-                        values: Bluetooth.devices.values.filter(d => d.state !== BluetoothDeviceState.Disconnected) // qmllint disable unresolved-type
-                    }
-
-                    MaterialIcon {
-                        id: device
-
-                        required property BluetoothDevice modelData
-
-                        animate: true
-                        text: Icons.getBluetoothIcon(modelData?.icon)
-                        color: root.colour
-                        fill: 1
-
-                        SequentialAnimation on opacity {
-                            running: device.modelData?.state !== BluetoothDeviceState.Connected // qmllint disable unresolved-type
-                            alwaysRunToEnd: true
-                            loops: Animation.Infinite
-
-                            Anim {
-                                from: 1
-                                to: 0
-                                duration: Tokens.anim.durations.large
-                                easing: Tokens.anim.standardAccel
-                            }
-                            Anim {
-                                from: 0
-                                to: 1
-                                duration: Tokens.anim.durations.large
-                                easing: Tokens.anim.standardDecel
-                            }
-                        }
-                    }
-                }
             }
 
             Behavior on Layout.preferredHeight {
@@ -237,6 +209,7 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
+                font.pointSize: root.statusIconSize
                 text: {
                     if (!UPower.displayDevice.isLaptopBattery) {
                         if (PowerProfiles.profile === PowerProfile.PowerSaver)

@@ -136,8 +136,8 @@ Item {
     Toasts.Toasts {
         id: toasts
 
-        anchors.bottom: sidebar.visible ? parent.bottom : utilities.top
-        anchors.right: sidebar.left
+        anchors.top: parent.top
+        anchors.right: parent.right
         anchors.margins: Tokens.padding.normal
     }
 

@@ -21,4 +21,9 @@
     source = ../config/hypr/scripts/brightness.sh;
     executable = true;
   };
+
+  home.file.".config/hypr/space-action.sh" = {
+    source = ../config/hypr/scripts/space-action.sh;
+    executable = true;
+  };
 }

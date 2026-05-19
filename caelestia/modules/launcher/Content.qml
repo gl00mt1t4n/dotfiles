@@ -4,6 +4,7 @@ import QtQuick
 import Caelestia.Config
 import qs.components
 import qs.components.controls
+import qs.components.misc
 import qs.services
 import qs.modules.launcher.services
 
@@ -16,6 +17,16 @@ Item {
 
     readonly property int padding: Tokens.padding.large
     readonly property int rounding: Tokens.rounding.large
+
+    CustomShortcut {
+        name: "wallpapers"
+        description: "Open wallpaper picker"
+        onPressed: {
+            search.text = `${GlobalConfig.launcher.actionPrefix}wallpaper `;
+            root.visibilities.launcher = true;
+            search.forceActiveFocus();
+        }
+    }
 
     implicitWidth: listWrapper.width + padding * 2
     implicitHeight: searchWrapper.height + listWrapper.height + padding * 2

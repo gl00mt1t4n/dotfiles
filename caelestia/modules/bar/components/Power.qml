@@ -30,6 +30,6 @@ Item {
         text: "power_settings_new"
         color: Colours.palette.m3error
         font.bold: true
-        font.pointSize: Tokens.font.size.normal
+        font.pointSize: Tokens.font.size.large
     }
 }

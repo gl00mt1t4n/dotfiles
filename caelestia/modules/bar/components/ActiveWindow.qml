@@ -12,6 +12,7 @@ Item {
     required property var bar
     required property Brightness.Monitor monitor
     property color colour: Colours.palette.m3primary
+    readonly property int titleHeightLimit: Math.max(70, Math.round(maxHeight * 0.58))
 
     readonly property string windowTitle: {
         const title = Hypr.activeToplevel?.title;
@@ -70,6 +71,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
 
         animate: true
+        font.pointSize: Math.round(Tokens.font.size.larger * 1.08)
         text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")
         color: root.colour
     }
@@ -89,7 +91,7 @@ Item {
         font.pointSize: root.Tokens.font.size.smaller
         font.family: root.Tokens.font.family.mono
         elide: Qt.ElideRight
-        elideWidth: root.maxHeight - icon.height
+        elideWidth: Math.max(0, Math.min(root.titleHeightLimit, root.maxHeight - icon.height - root.Tokens.spacing.small))
 
         onTextChanged: {
             const next = root.current === text1 ? text2 : text1;

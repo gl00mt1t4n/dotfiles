@@ -36,6 +36,8 @@
       config.allowUnfree = true;
     };
 
+    caelestiaCli = caelestia-cli.packages.${system}.default;
+
     caelestiaShell = pkgs.callPackage ./caelestia/nix {
       rev = self.rev or self.dirtyRev or "dirty";
       stdenv = pkgs.clangStdenv;
@@ -43,7 +45,7 @@
         withX11 = false;
         withI3 = false;
       };
-      caelestia-cli = caelestia-cli.packages.${system}.default;
+      caelestia-cli = caelestiaCli;
       withCli = true;
     };
 
@@ -52,7 +54,7 @@
     };
 
     homeModules = [ ./home.nix ];
-    homeExtraSpecialArgs = { inherit caelestiaShell caelestiaSpotify; };
+    homeExtraSpecialArgs = { inherit caelestiaShell caelestiaCli caelestiaSpotify; };
   in {
     packages.${system} = {
       caelestia-shell = caelestiaShell;

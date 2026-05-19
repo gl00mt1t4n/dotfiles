@@ -28,9 +28,9 @@
     vim
     home-manager
     gnumake
-    blueman
     asusctl
     supergfxctl
+    power-profiles-daemon
     codex
   ];
 
@@ -64,13 +64,13 @@
   # Bluetooth enabling
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-  services.blueman.enable = true;
 
   # i2c access for ddcutil (caelestia uses this for external monitor brightness)
   hardware.i2c.enable = true;
 
   # UPower — required for caelestia battery status and power profile switching
   services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
 
   # Hermes Agent
   services.hermes-agent = {
@@ -116,6 +116,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
+    nerd-fonts.meslo-lg
     nerd-fonts.symbols-only
     nerd-fonts.caskaydia-cove  # caelestia monospace
     material-symbols            # caelestia icon font

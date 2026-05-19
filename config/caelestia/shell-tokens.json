@@ -1,0 +1,90 @@
+{
+  "appearance": {
+    "rounding": {
+      "extraSmall": 3,
+      "small": 8,
+      "normal": 12,
+      "large": 18
+    },
+    "spacing": {
+      "small": 5,
+      "smaller": 7,
+      "normal": 9,
+      "larger": 12,
+      "large": 16
+    },
+    "padding": {
+      "small": 4,
+      "smaller": 5,
+      "normal": 7,
+      "larger": 9,
+      "large": 11
+    },
+    "fontSize": {
+      "small": 10,
+      "smaller": 11,
+      "normal": 12,
+      "larger": 14,
+      "large": 16,
+      "extraLarge": 24
+    }
+  },
+  "sizes": {
+    "bar": {
+      "innerWidth": 34,
+      "windowPreviewSize": 340,
+      "trayMenuWidth": 280,
+      "batteryWidth": 230,
+      "networkWidth": 300,
+      "kbLayoutWidth": 300
+    },
+    "dashboard": {
+      "infoWidth": 180,
+      "infoIconSize": 22,
+      "dateTimeWidth": 100,
+      "mediaWidth": 180,
+      "mediaProgressThickness": 6,
+      "resourceProgressThickness": 8,
+      "weatherWidth": 230,
+      "mediaCoverArtSize": 132,
+      "mediaVisualiserSize": 70,
+      "resourceSize": 180
+    },
+    "launcher": {
+      "itemWidth": 520,
+      "itemHeight": 48,
+      "wallpaperWidth": 250,
+      "wallpaperHeight": 178
+    },
+    "notifs": {
+      "width": 360,
+      "image": 36,
+      "badge": 18
+    },
+    "osd": {
+      "sliderWidth": 24,
+      "sliderHeight": 130
+    },
+    "session": {
+      "button": 68
+    },
+    "sidebar": {
+      "width": 380
+    },
+    "utilities": {
+      "width": 390,
+      "toastWidth": 380
+    },
+    "lock": {
+      "heightMult": 0.62,
+      "centerWidth": 520
+    },
+    "winfo": {
+      "heightMult": 0.62,
+      "detailsWidth": 440
+    },
+    "controlCenter": {
+      "heightMult": 0.62
+    }
+  }
+}

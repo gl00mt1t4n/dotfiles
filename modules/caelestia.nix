@@ -1,9 +1,12 @@
-{ caelestiaShell, lib, ... }:
+{ caelestiaShell, caelestiaCli, lib, ... }:
 let
   caelestiaConfig = ../config/caelestia;
 in
 {
-  home.packages = [ caelestiaShell ];
+  home.packages = [
+    caelestiaShell
+    caelestiaCli
+  ];
 
   # Caelestia writes monitor overlays under ~/.config/caelestia/monitors/<screen>.
   # Keep repo config authoritative, but install it into a writable directory.

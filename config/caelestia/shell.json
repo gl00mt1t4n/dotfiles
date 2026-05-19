@@ -9,22 +9,22 @@
         "clock": "Rubik"
       },
       "size": {
-        "scale": 1.04
+        "scale": 0.96
       }
     },
     "rounding": {
-      "scale": 1
+      "scale": 0.86
     },
     "spacing": {
-      "scale": 1
+      "scale": 0.88
     },
     "padding": {
-      "scale": 1
+      "scale": 0.88
     },
     "transparency": {
       "enabled": true,
-      "base": 0.88,
-      "layers": 0.45
+      "base": 0.93,
+      "layers": 0.26
     }
   },
   "general": {
@@ -61,8 +61,22 @@
       "showLockStatus": true
     },
     "clock": {
-      "showDate": true,
-      "showIcon": true
+      "showDate": false,
+      "showIcon": false
+    },
+    "tray": {
+      "compact": false,
+      "recolour": false,
+      "iconSubs": [
+        {
+          "id": "spotify",
+          "icon": "spotify-client"
+        },
+        {
+          "id": "spotify-client",
+          "icon": "spotify-client"
+        }
+      ]
     },
     "workspaces": {
       "shown": 7,
@@ -87,12 +101,14 @@
     "showWeather": false
   },
   "launcher": {
-    "maxShown": 8,
+    "actionPrefix": "/",
+    "maxShown": 9,
     "maxWallpapers": 9,
     "favouriteApps": [
       "kitty.desktop",
-      "zen-browser.desktop",
+      "zen.desktop",
       "firefox.desktop",
+      "vesktop.desktop",
       "spotify.desktop",
       "thunar.desktop"
     ],

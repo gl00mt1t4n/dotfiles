@@ -49,6 +49,7 @@
       kitty
       firefox
       git
+      jq
       thunar
       pavucontrol
       claude-code
@@ -56,11 +57,48 @@
       brightnessctl # direct backlight control
       libnotify     # notify-send for kbd-backlight script
       playerctl
+      nerd-fonts.meslo-lg          # Menlo-like terminal font
       zen-browser
+      vesktop                      # Discord client with better Wayland behavior
       lxqt.lxqt-policykit         # polkit agent — auth dialogs for Thunar, BT, NM
       catppuccin-gtk               # GTK theme
       papirus-icon-theme           # icon set
       catppuccin-cursors.mochaDark # cursor theme
     ];
+  };
+
+  xdg.desktopEntries.zen = {
+    name = "Zen Browser";
+    genericName = "Web Browser";
+    exec = "zen --new-window %U";
+    icon = "zen";
+    terminal = false;
+    categories = [ "Network" "WebBrowser" ];
+    mimeType = [
+      "text/html"
+      "text/xml"
+      "application/xhtml+xml"
+      "application/vnd.mozilla.xul+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+    ];
+    startupNotify = true;
+    settings = {
+      StartupWMClass = "zen";
+    };
+    actions = {
+      new-window = {
+        name = "New Window";
+        exec = "zen --new-window %U";
+      };
+      new-private-window = {
+        name = "New Private Window";
+        exec = "zen --private-window %U";
+      };
+      profile-manager-window = {
+        name = "Profile Manager";
+        exec = "zen --ProfileManager";
+      };
+    };
   };
 }

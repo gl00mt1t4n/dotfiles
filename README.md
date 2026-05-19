@@ -159,6 +159,7 @@ Bash + starship prompt + zoxide + fzf. Defined in `modules/shell.nix`.
 | `SUPER+Q` | Open kitty |
 | `SUPER+C` | Close window |
 | `SUPER+R` | Caelestia launcher |
+| `SUPER+Shift+R` | Caelestia wallpaper picker |
 | `SUPER+D` | Caelestia dashboard |
 | `SUPER+B` | Caelestia sidebar |
 | `SUPER+U` | Caelestia utilities |
