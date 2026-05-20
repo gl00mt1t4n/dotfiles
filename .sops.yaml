@@ -1,0 +1,7 @@
+keys:
+  - &gl00m_ssh age1w3wvxx5lfqmvfkmetzpt5dky0kt46gm0q99tjscu6ejd76l2eflsarv8ms
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *gl00m_ssh

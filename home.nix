@@ -3,6 +3,7 @@
   imports = [
     ./modules/shell.nix
     ./modules/git.nix
+    ./modules/agents.nix
     ./modules/hyprland.nix
     ./modules/caelestia.nix
     ./modules/spicetify.nix

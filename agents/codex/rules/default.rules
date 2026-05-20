@@ -1,0 +1,8 @@
+prefix_rule(pattern=["nix", "flake", "show"], decision="allow")
+prefix_rule(pattern=["nix", "eval"], decision="allow")
+prefix_rule(pattern=["nix", "run"], decision="allow")
+prefix_rule(pattern=["home-manager", "build"], decision="allow")
+prefix_rule(pattern=["home-manager", "switch"], decision="allow")
+prefix_rule(pattern=["hyprctl"], decision="allow")
+prefix_rule(pattern=["pgrep"], decision="allow")
+prefix_rule(pattern=["systemctl", "status"], decision="allow")

@@ -1,0 +1,15 @@
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+model:
+  base_url: http://127.0.0.1:11435/v1
+  default: gpt-5-mini
+terminal:
+  backend: local
+  timeout: 180
+toolsets:
+  - file
+  - terminal
+  - memory
+  - skills
+  - session_search

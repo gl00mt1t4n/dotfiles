@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./modules/agent-services.nix
+  ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -77,10 +80,10 @@
     enable = true;
     settings = {
       model = {
-        base_url = "https://openrouter.ai/api/v1";
-        default = "nvidia/nemotron-3-super-120b-a12b:free";
+        base_url = "http://127.0.0.1:11435/v1";
+        default = "gpt-5-mini";
       };
-      toolsets = [ "all" ];
+      toolsets = [ "file" "terminal" "memory" "skills" "session_search" ];
       memory = {
         memory_enabled = true;
         user_profile_enabled = true;
@@ -90,14 +93,11 @@
         timeout = 180;
       };
     };
-    environmentFiles = [ "/var/lib/hermes/env" ];
-    documents = {
-      "USER.md" = ./hermes/USER.md;
-    };
     extraPackages = with pkgs; [
       ripgrep
       fd
       git
+      tmux
     ];
     addToSystemPackages = true;
   };
