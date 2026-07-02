@@ -61,6 +61,14 @@
     options = "--delete-older-than 30d";
   };
 
+  # Compressed RAM-backed swap. Ceiling is 50% of RAM (~15 GiB); actual use
+  # is on-demand. Prevents OOM under load without touching the NVMe.
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
   # System state version
   system.stateVersion = "25.11";
 
@@ -93,12 +101,6 @@
         timeout = 180;
       };
     };
-    extraPackages = with pkgs; [
-      ripgrep
-      fd
-      git
-      tmux
-    ];
     addToSystemPackages = true;
   };
 

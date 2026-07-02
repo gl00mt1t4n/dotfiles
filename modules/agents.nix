@@ -42,11 +42,7 @@ in
   home.file.".config/tmux/tmux.conf".source = ../agents/tmux/tmux.conf;
 
   programs.bash.bashrcExtra = ''
-    if [[ $- == *i* ]] && [ -z "$TMUX" ] && [ -z "$NO_TMUX" ] && command -v tmux >/dev/null 2>&1; then
-      case "''${TERM_PROGRAM:-}" in
-        vscode) ;;
-        *) tmux new-session -A -s main ;;
-      esac
-    fi
+    # Recovery-safe default: do not auto-attach tmux from interactive shells.
+    # Manual `tmux` remains available when wanted.
   '';
 }

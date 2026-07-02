@@ -26,4 +26,5 @@
     source = ../config/hypr/scripts/space-action.sh;
     executable = true;
   };
+
 }
