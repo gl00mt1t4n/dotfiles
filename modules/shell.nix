@@ -7,12 +7,16 @@
     fd
     fzf
     zoxide
-    wl-clipboard 
-    grim #screenshot
-    slurp #screenshot editor
+    wl-clipboard
+    grim
+    slurp
     brightnessctl
     playerctl
-
+    cliphist   # clipboard history daemon + query tool
+    wofi       # dmenu-style picker used by clipboard history
+    blueman    # bluetooth device manager GUI
+    mpv        # video/audio player (caelestia uses it for media playback)
+    imv        # lightweight Wayland image viewer
   ];
 
   programs.starship = {

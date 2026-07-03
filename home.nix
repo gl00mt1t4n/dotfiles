@@ -59,7 +59,6 @@
       firefox
       git
       jq
-      thunar
       pavucontrol
       claude-code
       zenity        # screenshot rename dialog
@@ -86,6 +85,28 @@
 
       exec zen --blank-window
     '';
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html"                = [ "zen.desktop" ];
+      "x-scheme-handler/http"   = [ "zen.desktop" ];
+      "x-scheme-handler/https"  = [ "zen.desktop" ];
+      "x-scheme-handler/about"  = [ "zen.desktop" ];
+      "x-scheme-handler/unknown"= [ "zen.desktop" ];
+      "inode/directory"         = [ "thunar.desktop" ];
+      "video/mp4"               = [ "mpv.desktop" ];
+      "video/x-matroska"        = [ "mpv.desktop" ];
+      "video/webm"              = [ "mpv.desktop" ];
+      "audio/mpeg"              = [ "mpv.desktop" ];
+      "audio/ogg"               = [ "mpv.desktop" ];
+      "audio/flac"              = [ "mpv.desktop" ];
+      "image/png"               = [ "imv.desktop" ];
+      "image/jpeg"              = [ "imv.desktop" ];
+      "image/gif"               = [ "imv.desktop" ];
+      "image/webp"              = [ "imv.desktop" ];
+    };
   };
 
   xdg.desktopEntries.zen = {

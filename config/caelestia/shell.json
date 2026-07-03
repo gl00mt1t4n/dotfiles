@@ -125,8 +125,8 @@
     "hideNotifs": false
   },
   "notifs": {
-    "expire": false,
-    "defaultExpireTimeout": 5000
+    "expire": true,
+    "defaultExpireTimeout": 8000
   },
   "osd": {
     "enabled": true,

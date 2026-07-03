@@ -46,9 +46,13 @@
     xwayland.enable = true;
   };
 
-  # xdg-desktop-portal-gtk provides file pickers for Firefox, Thunar, and other GTK apps
-  # hyprland portal handles screencopy; gtk portal handles everything else
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # hyprland portal handles screencopy (screen sharing); gtk portal handles file pickers etc.
+  # config.hyprland.default tells the portal dispatcher which backend to use per interface.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.hyprland.default = [ "hyprland" "gtk" ];
+  };
 
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -72,12 +76,38 @@
   # System state version
   system.stateVersion = "25.11";
 
-  # Bluetooth enabling
+  # Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    General = {
+      FastConnectable = true;
+      Experimental = true;    # unlocks newer BT features (LE Audio, codec improvements)
+    };
+    Policy = {
+      AutoEnable = true;
+      ReconnectAttempts = 7;
+      ReconnectIntervals = "1, 2, 4, 8, 16, 32, 64";
+    };
+  };
 
   # i2c access for ddcutil (caelestia uses this for external monitor brightness)
   hardware.i2c.enable = true;
+
+  # Thunar file manager with plugins (system-level so D-Bus and MIME are registered properly)
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin  # right-click to extract/create archives
+      thunar-volman          # auto-mount USB drives and removable media
+    ];
+  };
+
+  # Thumbnail generation for Thunar (images, video frames, PDFs)
+  services.tumbler.enable = true;
+
+  # Virtual filesystem — makes USB drives, MTP (Android), SMB shares mount in Thunar
+  services.gvfs.enable = true;
 
   # UPower — required for caelestia battery status and power profile switching
   services.upower.enable = true;
