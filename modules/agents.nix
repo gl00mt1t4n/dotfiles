@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 let
   managedFiles = [
     ".codex/config.toml"
@@ -7,6 +7,7 @@ let
     ".claude/CLAUDE.md"
     ".config/tmux/tmux.conf"
   ];
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
 in
 {
   home.sessionVariables = {
@@ -35,11 +36,11 @@ in
     done
   '';
 
-  home.file.".codex/config.toml".source = ../agents/codex/config.toml;
-  home.file.".codex/rules/default.rules".source = ../agents/codex/rules/default.rules;
-  home.file.".claude/settings.json".source = ../agents/claude/settings.json;
-  home.file.".claude/CLAUDE.md".source = ../agents/claude/CLAUDE.md;
-  home.file.".config/tmux/tmux.conf".source = ../agents/tmux/tmux.conf;
+  home.file.".codex/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/agents/codex/config.toml";
+  home.file.".codex/rules/default.rules".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/agents/codex/rules/default.rules";
+  home.file.".claude/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/agents/claude/settings.json";
+  home.file.".claude/CLAUDE.md".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/agents/claude/CLAUDE.md";
+  home.file.".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/agents/tmux/tmux.conf";
 
   programs.bash.bashrcExtra = ''
     # Recovery-safe default: do not auto-attach tmux from interactive shells.

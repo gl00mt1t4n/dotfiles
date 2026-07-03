@@ -69,6 +69,7 @@
       dotfiles = "cd \${DOTFILES_DIR:-$HOME/dotfiles}";
       nixconf  = "sudo nvim \${DOTFILES_DIR:-$HOME/dotfiles}/configuration.nix";
       hyprconf = "nvim \${DOTFILES_DIR:-$HOME/dotfiles}/config/hypr/hyprland.conf";
+      start-hyprland = "AQ_NO_ATOMIC=1 /run/current-system/sw/bin/start-hyprland";
       ls       = "eza --icons";
       ll       = "eza -la --icons";
       cat      = "bat";

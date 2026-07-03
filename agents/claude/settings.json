@@ -1,4 +1,7 @@
 {
   "effortLevel": "medium",
-  "theme": "dark"
+  "theme": "dark",
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  }
 }

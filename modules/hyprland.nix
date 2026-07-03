@@ -1,30 +1,12 @@
-{ ... }:
+{ config, ... }:
+let
+  dotfiles = "${config.home.homeDirectory}/dotfiles";
+in
 {
-  home.file.".config/hypr/hyprland.conf".source = ../config/hypr/hyprland.conf;
-
-  home.file.".config/hypr/view-logs.sh" = {
-    source = ../config/hypr/scripts/view-logs.sh;
-    executable = true;
-  };
-
-  home.file.".config/hypr/screenshot.sh" = {
-    source = ../config/hypr/scripts/screenshot.sh;
-    executable = true;
-  };
-
-  home.file.".config/hypr/kbd-backlight.sh" = {
-    source = ../config/hypr/scripts/kbd-backlight.sh;
-    executable = true;
-  };
-
-  home.file.".config/hypr/brightness.sh" = {
-    source = ../config/hypr/scripts/brightness.sh;
-    executable = true;
-  };
-
-  home.file.".config/hypr/space-action.sh" = {
-    source = ../config/hypr/scripts/space-action.sh;
-    executable = true;
-  };
-
+  home.file.".config/hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/hyprland.conf";
+  home.file.".config/hypr/view-logs.sh".source   = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/scripts/view-logs.sh";
+  home.file.".config/hypr/screenshot.sh".source   = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/scripts/screenshot.sh";
+  home.file.".config/hypr/kbd-backlight.sh".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/scripts/kbd-backlight.sh";
+  home.file.".config/hypr/brightness.sh".source   = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/scripts/brightness.sh";
+  home.file.".config/hypr/space-action.sh".source  = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/config/hypr/scripts/space-action.sh";
 }

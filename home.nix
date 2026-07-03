@@ -34,6 +34,14 @@
     gtk4.theme = config.gtk.theme;
   };
 
+  # Softer, mac-like font rendering: light hinting + subpixel AA.
+  fonts.fontconfig = {
+    enable = true;
+    hinting = "slight";
+    subpixelRendering = "rgb";
+    antialiasing = true;
+  };
+
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
