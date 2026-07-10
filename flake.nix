@@ -11,7 +11,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent";
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,7 +26,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix, hermes-agent, quickshell, caelestia-cli, zen-browser, ... }:
+  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, ... }:
   let
     system = "x86_64-linux";
     overlays = [
@@ -73,7 +72,6 @@
         { nixpkgs.overlays = overlays; }
         ./configuration.nix
         sops-nix.nixosModules.sops
-        hermes-agent.nixosModules.default
       ];
     };
 
@@ -91,7 +89,6 @@
         { nixpkgs.overlays = overlays; }
         ./configuration.nix
         sops-nix.nixosModules.sops
-        hermes-agent.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

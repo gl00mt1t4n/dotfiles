@@ -3,7 +3,6 @@
   imports = [
     ./modules/shell.nix
     ./modules/git.nix
-    ./modules/agents.nix
     ./modules/hyprland.nix
     ./modules/caelestia.nix
     ./modules/spicetify.nix
@@ -54,6 +53,7 @@
     username = "gl00m";
     homeDirectory = "/home/gl00m";
     stateVersion = "25.11";
+    sessionPath = [ "$HOME/.local/bin" ];
     packages = with pkgs; [
       kitty
       firefox
@@ -72,7 +72,58 @@
       catppuccin-gtk               # GTK theme
       papirus-icon-theme           # icon set
       catppuccin-cursors.mochaDark # cursor theme
+      appimage-run                 # used by binfmt and appimage-install script
     ];
+  };
+
+  home.file.".local/bin/appimage-install" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      set -e
+      if [ -z "$1" ]; then
+        echo "Usage: appimage-install <path-to.AppImage>"
+        exit 1
+      fi
+
+      APPIMAGE=$(realpath "$1")
+      WORKDIR=$(mktemp -d)
+      trap 'rm -rf "$WORKDIR"' EXIT
+
+      cd "$WORKDIR"
+      "$APPIMAGE" --appimage-extract > /dev/null 2>&1
+
+      DESKTOP=$(find squashfs-root -maxdepth 1 -name "*.desktop" | head -1)
+      if [ -z "$DESKTOP" ]; then
+        echo "No .desktop file found in AppImage"
+        exit 1
+      fi
+
+      NAME=$(basename "$APPIMAGE")
+      APPDIR="$HOME/Applications"
+      mkdir -p "$APPDIR"
+      DEST="$APPDIR/$NAME"
+
+      if [ "$APPIMAGE" != "$DEST" ]; then
+        cp "$APPIMAGE" "$DEST"
+        chmod +x "$DEST"
+      fi
+
+      # Copy icons
+      ICON_DIR="$HOME/.local/share/icons"
+      mkdir -p "$ICON_DIR"
+      find squashfs-root -maxdepth 2 \( -name "*.png" -o -name "*.svg" \) | head -1 | xargs -I{} cp {} "$ICON_DIR/"
+
+      ICON_FILE=$(find squashfs-root -maxdepth 2 \( -name "*.png" -o -name "*.svg" \) | head -1)
+      ICON_NAME=$(basename "''${ICON_FILE%.*}")
+
+      # Write desktop entry pointing to the installed AppImage
+      DESKTOP_OUT="$HOME/.local/share/applications/$(basename "$DESKTOP")"
+      sed "s|Exec=.*|Exec=$DEST|; s|Icon=.*|Icon=$ICON_NAME|" "$DESKTOP" > "$DESKTOP_OUT"
+
+      echo "Installed: $DEST"
+      echo "Launcher entry: $DESKTOP_OUT"
+    '';
   };
 
   home.file.".local/bin/zen-new-window" = {
@@ -83,31 +134,67 @@
         exec zen --new-window "$@"
       fi
 
-      exec zen --blank-window
+      # Start Zen normally when launched from the app menu/dock.  Using
+      # --blank-window bypasses Zen/Firefox session restore, which made it look
+      # like tabs were lost after reboot/shutdown.
+      exec zen
     '';
   };
+
+  # Zen is Firefox-based but stores profiles under ~/.zen.  Keep the browser's
+  # own session-restore preference enabled for every profile that exists.
+  # This is intentionally a user.js so it survives Nix rebuilds and new profiles.
+  home.activation.zenSessionRestore = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    zen_dir="$HOME/.zen"
+    if [ -d "$zen_dir" ]; then
+      while IFS= read -r -d ''' profile_dir; do
+        user_js="$profile_dir/user.js"
+        mkdir -p "$profile_dir"
+        touch "$user_js"
+
+        for pref in \
+          'user_pref("browser.startup.page", 3);' \
+          'user_pref("browser.sessionstore.resume_from_crash", true);' \
+          'user_pref("browser.sessionstore.restore_on_demand", true);'
+        do
+          pref_name=$(printf '%s\n' "$pref" | ${pkgs.coreutils}/bin/cut -d'"' -f2)
+          ${pkgs.gnused}/bin/sed -i "/user_pref(\"$pref_name\"/d" "$user_js"
+          printf '%s\n' "$pref" >> "$user_js"
+        done
+      done < <(${pkgs.findutils}/bin/find "$zen_dir" -maxdepth 1 -type d \( -name "*.default*" -o -name "*.zen*" -o -name "*.release*" \) -print0)
+    fi
+  '';
 
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html"                = [ "zen.desktop" ];
-      "x-scheme-handler/http"   = [ "zen.desktop" ];
-      "x-scheme-handler/https"  = [ "zen.desktop" ];
-      "x-scheme-handler/about"  = [ "zen.desktop" ];
-      "x-scheme-handler/unknown"= [ "zen.desktop" ];
-      "inode/directory"         = [ "thunar.desktop" ];
-      "video/mp4"               = [ "mpv.desktop" ];
-      "video/x-matroska"        = [ "mpv.desktop" ];
-      "video/webm"              = [ "mpv.desktop" ];
-      "audio/mpeg"              = [ "mpv.desktop" ];
-      "audio/ogg"               = [ "mpv.desktop" ];
-      "audio/flac"              = [ "mpv.desktop" ];
-      "image/png"               = [ "imv.desktop" ];
-      "image/jpeg"              = [ "imv.desktop" ];
-      "image/gif"               = [ "imv.desktop" ];
-      "image/webp"              = [ "imv.desktop" ];
+      "text/html"                          = [ "zen.desktop" ];
+      "x-scheme-handler/http"              = [ "zen.desktop" ];
+      "x-scheme-handler/https"             = [ "zen.desktop" ];
+      "x-scheme-handler/about"             = [ "zen.desktop" ];
+      "x-scheme-handler/unknown"           = [ "zen.desktop" ];
+      "x-scheme-handler/chrome"            = [ "zen.desktop" ];
+      "application/x-extension-htm"        = [ "zen.desktop" ];
+      "application/x-extension-html"       = [ "zen.desktop" ];
+      "application/xhtml+xml"              = [ "zen.desktop" ];
+      "x-scheme-handler/claude-cli"        = [ "claude-code-url-handler.desktop" ];
+      "x-scheme-handler/discord"           = [ "vesktop.desktop" ];
+      "inode/directory"                    = [ "thunar.desktop" ];
+      "video/mp4"                          = [ "mpv.desktop" ];
+      "video/x-matroska"                   = [ "mpv.desktop" ];
+      "video/webm"                         = [ "mpv.desktop" ];
+      "audio/mpeg"                         = [ "mpv.desktop" ];
+      "audio/ogg"                          = [ "mpv.desktop" ];
+      "audio/flac"                         = [ "mpv.desktop" ];
+      "image/png"                          = [ "imv.desktop" ];
+      "image/jpeg"                         = [ "imv.desktop" ];
+      "image/gif"                          = [ "imv.desktop" ];
+      "image/webp"                         = [ "imv.desktop" ];
     };
   };
+
+  # Allow home-manager to own mimeapps.list (overwrites any manually created copy)
+  xdg.configFile."mimeapps.list".force = true;
 
   xdg.desktopEntries.zen = {
     name = "Zen Browser";

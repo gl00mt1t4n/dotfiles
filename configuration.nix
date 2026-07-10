@@ -2,7 +2,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/agent-services.nix
   ];
 
   # Bootloader
@@ -22,7 +21,7 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" "hermes" "video" "i2c" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "i2c" ];
   };
 
   # Packages
@@ -34,7 +33,6 @@
     asusctl
     supergfxctl
     power-profiles-daemon
-    codex
   ];
 
   # Shell
@@ -56,6 +54,15 @@
 
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Allow running dynamically-linked ELF binaries downloaded outside Nix
+  programs.nix-ld.enable = true;
+
+  # AppImage support: binfmt lets the kernel run AppImages directly (double-click in Thunar works)
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # Keep only the last 10 boot generations and garbage collect weekly
   boot.loader.systemd-boot.configurationLimit = 10;
@@ -113,25 +120,13 @@
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
-  # Hermes Agent
-  services.hermes-agent = {
-    enable = true;
-    settings = {
-      model = {
-        base_url = "http://127.0.0.1:11435/v1";
-        default = "gpt-5-mini";
-      };
-      toolsets = [ "file" "terminal" "memory" "skills" "session_search" ];
-      memory = {
-        memory_enabled = true;
-        user_profile_enabled = true;
-      };
-      terminal = {
-        backend = "local";
-        timeout = 180;
-      };
-    };
-    addToSystemPackages = true;
+  # Closing the lid should suspend instead of fully terminating the graphical
+  # session. This gives Zen a chance to keep its live session instead of relying
+  # on crash/shutdown recovery.
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = "suspend";
+    HandleLidSwitchDocked = "ignore";
   };
 
   # Audio

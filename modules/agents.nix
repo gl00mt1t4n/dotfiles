@@ -10,14 +10,7 @@ let
   dotfiles = "${config.home.homeDirectory}/dotfiles";
 in
 {
-  home.sessionVariables = {
-    SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
-  };
-
   home.packages = with pkgs; [
-    age
-    sops
-    ssh-to-age
     tmux
   ];
 
