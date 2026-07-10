@@ -37,9 +37,11 @@
 
   programs.bash = {
     enable = true;
+    # Home Manager places bashrcExtra before its interactive-shell guard, so keep
+    # it limited to cheap, side-effect-free definitions. Prompt/hooks belong in
+    # initExtra below; otherwise non-interactive shells that source ~/.bashrc can
+    # inherit readline/prompt setup and break automation/session startup.
     bashrcExtra = ''
-      eval "$(zoxide init bash)"
-      eval "$(fzf --bash)"
       nixrebuild() {
         local dotfiles="''${DOTFILES_DIR:-$HOME/dotfiles}"
         local dry_cmd build_cmd
@@ -68,6 +70,10 @@
           return 1
         fi
       }
+    '';
+    initExtra = ''
+      eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
+      eval "$(${pkgs.fzf}/bin/fzf --bash)"
     '';
     shellAliases = {
       dotfiles = "cd \${DOTFILES_DIR:-$HOME/dotfiles}";
