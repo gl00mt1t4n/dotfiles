@@ -24,14 +24,16 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, ... }:
+  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, claude-desktop, ... }:
   let
     system = "x86_64-linux";
     overlays = [
       (final: prev: {
         zen-browser = zen-browser.packages.${system}.default;
+        claude-desktop = claude-desktop.packages.${system}.claude-desktop;
       })
     ];
     pkgs = import nixpkgs {

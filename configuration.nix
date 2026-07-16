@@ -13,7 +13,7 @@
   networking.networkmanager.enable = true;
 
   # Locale
-  time.timeZone = "America/Chicago";
+  time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
 
   # User
@@ -33,7 +33,11 @@
     asusctl
     supergfxctl
     power-profiles-daemon
+    codex
+    claude-desktop
   ];
+
+  programs.steam.enable = true;
 
   # Shell
   programs.bash.enable = true;
@@ -54,6 +58,19 @@
 
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Intel video acceleration. Without the iHD VA-API driver, Zen/Firefox can
+  # fall back to CPU video decode, causing high browser CPU and visible stutter.
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # VA-API iHD driver for modern Intel/Arc GPUs
+      vpl-gpu-rt         # oneVPL runtime used by newer Intel media stacks
+      intel-compute-runtime
+      libva-utils        # vainfo for diagnostics
+    ];
+  };
+  environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
 
   # Allow running dynamically-linked ELF binaries downloaded outside Nix
   programs.nix-ld.enable = true;
@@ -119,6 +136,31 @@
   # UPower — required for caelestia battery status and power profile switching
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
+
+  # Keep the laptop out of power-saver by default. Power-saver was causing
+  # visible video microstutter and occasional audio crackle on the 120 Hz panel.
+  systemd.services.power-profile-balanced = {
+    description = "Set balanced power profile";
+    after = [ "dbus.service" "power-profiles-daemon.service" ];
+    wants = [ "power-profiles-daemon.service" ];
+    wantedBy = [ "graphical.target" ];
+    path = [ pkgs.power-profiles-daemon pkgs.coreutils ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "set-balanced-power-profile" ''
+        for _ in $(seq 1 20); do
+          if powerprofilesctl list >/dev/null 2>&1; then
+            exec powerprofilesctl set balanced
+          fi
+          sleep 0.5
+        done
+        exec powerprofilesctl set balanced
+      '';
+    };
+  };
+  powerManagement.resumeCommands = ''
+    ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced || true
+  '';
 
   # Closing the lid should suspend instead of fully terminating the graphical
   # session. This gives Zen a chance to keep its live session instead of relying

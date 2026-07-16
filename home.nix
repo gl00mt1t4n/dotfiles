@@ -141,28 +141,34 @@
     '';
   };
 
-  # Zen is Firefox-based but stores profiles under ~/.zen.  Keep the browser's
-  # own session-restore preference enabled for every profile that exists.
-  # This is intentionally a user.js so it survives Nix rebuilds and new profiles.
+  # Zen is Firefox-based and stores profiles under ~/.config/zen in this package.
+  # Keep session restore and hardware video decode preferences enabled for every
+  # profile that exists. user.js survives rebuilds and applies on browser restart.
   home.activation.zenSessionRestore = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    zen_dir="$HOME/.zen"
-    if [ -d "$zen_dir" ]; then
-      while IFS= read -r -d ''' profile_dir; do
-        user_js="$profile_dir/user.js"
-        mkdir -p "$profile_dir"
-        touch "$user_js"
+    for zen_dir in "$HOME/.config/zen" "$HOME/.zen"; do
+      if [ -d "$zen_dir" ]; then
+        while IFS= read -r -d ''' profile_dir; do
+          user_js="$profile_dir/user.js"
+          mkdir -p "$profile_dir"
+          touch "$user_js"
 
-        for pref in \
-          'user_pref("browser.startup.page", 3);' \
-          'user_pref("browser.sessionstore.resume_from_crash", true);' \
-          'user_pref("browser.sessionstore.restore_on_demand", true);'
-        do
-          pref_name=$(printf '%s\n' "$pref" | ${pkgs.coreutils}/bin/cut -d'"' -f2)
-          ${pkgs.gnused}/bin/sed -i "/user_pref(\"$pref_name\"/d" "$user_js"
-          printf '%s\n' "$pref" >> "$user_js"
-        done
-      done < <(${pkgs.findutils}/bin/find "$zen_dir" -maxdepth 1 -type d \( -name "*.default*" -o -name "*.zen*" -o -name "*.release*" \) -print0)
-    fi
+          for pref in \
+            'user_pref("browser.startup.page", 3);' \
+            'user_pref("browser.sessionstore.resume_from_crash", true);' \
+            'user_pref("browser.sessionstore.restore_on_demand", true);' \
+            'user_pref("media.ffmpeg.vaapi.enabled", true);' \
+            'user_pref("media.hardware-video-decoding.force-enabled", true);' \
+            'user_pref("gfx.webrender.all", true);' \
+            'user_pref("widget.dmabuf.force-enabled", true);' \
+            'user_pref("media.av1.enabled", false);'
+          do
+            pref_name=$(printf '%s\n' "$pref" | ${pkgs.coreutils}/bin/cut -d'"' -f2)
+            ${pkgs.gnused}/bin/sed -i "/user_pref(\"$pref_name\"/d" "$user_js"
+            printf '%s\n' "$pref" >> "$user_js"
+          done
+        done < <(${pkgs.findutils}/bin/find "$zen_dir" -maxdepth 1 -type d \( -name "*.default*" -o -name "*.zen*" -o -name "*.release*" -o -name "*.Default Profile" \) -print0)
+      fi
+    done
   '';
 
   xdg.mimeApps = {
