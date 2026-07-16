@@ -24,8 +24,11 @@
     extraGroups = [ "networkmanager" "wheel" "video" "i2c" ];
   };
 
-  # Packages
   nixpkgs.config.allowUnfree = true;
+
+  # System-level packages and services.
+  # Put hardware/boot/driver/service tools here. Put normal GUI/user apps in
+  # modules/apps.nix so day-to-day installs have one obvious home.
   environment.systemPackages = with pkgs; [
     vim
     home-manager
@@ -37,6 +40,8 @@
     claude-desktop
   ];
 
+  # Steam itself is managed by NixOS. Steam games are normal Steam-managed user
+  # data, not Nix packages; install/uninstall them inside Steam as usual.
   programs.steam.enable = true;
 
   # Shell
@@ -63,6 +68,7 @@
   # fall back to CPU video decode, causing high browser CPU and visible stutter.
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver # VA-API iHD driver for modern Intel/Arc GPUs
       vpl-gpu-rt         # oneVPL runtime used by newer Intel media stacks
@@ -71,6 +77,7 @@
     ];
   };
   environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
+  environment.sessionVariables.FREETYPE_PROPERTIES = "truetype:interpreter-version=40";
 
   # Allow running dynamically-linked ELF binaries downloaded outside Nix
   programs.nix-ld.enable = true;

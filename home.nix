@@ -1,6 +1,7 @@
 { pkgs, config, ... }:
 {
   imports = [
+    ./modules/apps.nix
     ./modules/shell.nix
     ./modules/git.nix
     ./modules/hyprland.nix
@@ -36,9 +37,25 @@
   # Softer, mac-like font rendering: light hinting + subpixel AA.
   fonts.fontconfig = {
     enable = true;
+    antialiasing = true;
     hinting = "slight";
     subpixelRendering = "rgb";
-    antialiasing = true;
+    configFile.lcdfilter = {
+      enable = true;
+      priority = 10;
+      label = "lcdfilter-default";
+      text = ''
+        <?xml version='1.0'?>
+        <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+        <fontconfig>
+          <match target="font">
+            <edit mode="assign" name="lcdfilter">
+              <const>lcddefault</const>
+            </edit>
+          </match>
+        </fontconfig>
+      '';
+    };
   };
 
   home.pointerCursor = {
@@ -54,26 +71,6 @@
     homeDirectory = "/home/gl00m";
     stateVersion = "25.11";
     sessionPath = [ "$HOME/.local/bin" ];
-    packages = with pkgs; [
-      kitty
-      firefox
-      git
-      jq
-      pavucontrol
-      claude-code
-      zenity        # screenshot rename dialog
-      brightnessctl # direct backlight control
-      libnotify     # notify-send for kbd-backlight script
-      playerctl
-      nerd-fonts.meslo-lg          # Menlo-like terminal font
-      zen-browser
-      vesktop                      # Discord client with better Wayland behavior
-      lxqt.lxqt-policykit         # polkit agent — auth dialogs for Thunar, BT, NM
-      catppuccin-gtk               # GTK theme
-      papirus-icon-theme           # icon set
-      catppuccin-cursors.mochaDark # cursor theme
-      appimage-run                 # used by binfmt and appimage-install script
-    ];
   };
 
   home.file.".local/bin/appimage-install" = {

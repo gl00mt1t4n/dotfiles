@@ -10,7 +10,28 @@ Most day-to-day changes are applied with:
 nixrebuild
 ```
 
-Raw equivalent:
+## Start Here: Installing Things
+
+You do not usually need to think about flakes.
+
+- Normal GUI apps and CLI tools: add them to `modules/apps.nix`, then run `nixrebuild`.
+- System services, drivers, users, boot, hardware, and Steam itself: edit `configuration.nix`, then run `nixrebuild`.
+- Shell aliases/functions/prompt tools: edit `modules/shell.nix`, then run `nixrebuild`.
+- Hyprland keybinds/monitor/window rules: edit `config/hypr/hyprland.conf`, then run `hyprctl reload` or `nixrebuild`.
+- Steam games: install them inside Steam like on Windows. They are not Nix packages and do not go in any `.nix` file.
+- Random AppImages from the web: either run `appimage-run ./Thing.AppImage` or install one with `appimage-install ./Thing.AppImage`.
+
+Flakes are only the pinned build backend. Day to day, treat this repo as:
+
+```text
+configuration.nix   # system/hardware/services
+home.nix            # Home Manager entrypoint, mostly imports modules
+modules/apps.nix    # normal apps: edit this most often
+modules/*.nix       # focused user config modules
+config/*            # raw app/desktop config files
+```
+
+Raw equivalent of `nixrebuild`:
 
 ```bash
 sudo nixos-rebuild switch --flake .#gl00m-full
@@ -46,6 +67,7 @@ dotfiles/
 ├── TODO.md
 │
 ├── modules/
+│   ├── apps.nix                 # Normal user apps: edit this most often
 │   ├── shell.nix                # Bash, starship, zoxide, fzf, aliases, nixrebuild
 │   ├── git.nix                  # Git identity, delta pager, gh CLI
 │   ├── agents.nix               # Agent config symlinks, tmux, SOPS shell env
