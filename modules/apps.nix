@@ -1,4 +1,4 @@
-{ pkgs, hermesDesktop, ... }:
+{ pkgs, ... }:
 {
   # Put normal user-facing apps here.
   #
@@ -38,7 +38,6 @@
 
     # Agent/AI tools
     claude-code
-    hermesDesktop
 
     # Fonts/themes/icons
     inter
