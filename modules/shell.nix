@@ -79,7 +79,12 @@
       dotfiles = "cd \${DOTFILES_DIR:-$HOME/dotfiles}";
       nixconf  = "sudo nvim \${DOTFILES_DIR:-$HOME/dotfiles}/configuration.nix";
       hyprconf = "nvim \${DOTFILES_DIR:-$HOME/dotfiles}/config/hypr/hyprland.conf";
-      start-hyprland = "AQ_NO_ATOMIC=1 /run/current-system/sw/bin/start-hyprland";
+      # Do not force Aquamarine/Hyprland into legacy DRM mode. AQ_NO_ATOMIC=1
+      # was useful as an old compatibility workaround, but on this HiDPI Intel
+      # panel it disables atomic modesetting and shows up in Hyprland logs as
+      # "using the legacy drm iface". Keep the display stack on the normal atomic
+      # DRM path unless we are explicitly testing a rollback.
+      start-hyprland = "/run/current-system/sw/bin/start-hyprland";
       ls       = "eza --icons";
       ll       = "eza -la --icons";
       cat      = "bat";

@@ -108,6 +108,8 @@
       "kitty.desktop",
       "zen.desktop",
       "firefox.desktop",
+      "brave-browser.desktop",
+      "org.telegram.desktop.desktop",
       "vesktop.desktop",
       "spotify.desktop",
       "thunar.desktop"
@@ -141,7 +143,7 @@
   "services": {
     "audioIncrement": 0.05,
     "brightnessIncrement": 0.05,
-    "maxVolume": 1.0,
+    "maxVolume": 1.5,
     "defaultPlayer": "Spotify",
     "smartScheme": true,
     "showLyrics": false,

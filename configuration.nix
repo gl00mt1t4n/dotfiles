@@ -2,6 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./modules/hermes.nix
   ];
 
   # Bootloader
@@ -10,14 +11,17 @@
 
   # Networking
   networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    # VPN plugins for Private Internet Access OpenVPN profiles.
+    plugins = with pkgs; [ networkmanager-openvpn ];
+  };
 
   # Locale
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
 
   # User
-  # Add gloom to hermes for access
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
@@ -36,6 +40,10 @@
     asusctl
     supergfxctl
     power-profiles-daemon
+    libva-utils
+    mesa-demos
+    vulkan-tools
+    wayland-utils
     codex
     claude-desktop
   ];
@@ -43,6 +51,7 @@
   # Steam itself is managed by NixOS. Steam games are normal Steam-managed user
   # data, not Nix packages; install/uninstall them inside Steam as usual.
   programs.steam.enable = true;
+  programs.gamemode.enable = true;
 
   # Shell
   programs.bash.enable = true;
@@ -78,6 +87,8 @@
   };
   environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
   environment.sessionVariables.FREETYPE_PROPERTIES = "truetype:interpreter-version=40";
+  environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Allow running dynamically-linked ELF binaries downloaded outside Nix
   programs.nix-ld.enable = true;
@@ -189,7 +200,17 @@
 
   # Fonts
   fonts.fontconfig.enable = true;
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "Inter" "Noto Sans" "DejaVu Sans" ];
+    serif = [ "Noto Serif" "DejaVu Serif" ];
+    monospace = [ "MesloLGS Nerd Font Mono" "JetBrainsMono Nerd Font Mono" "DejaVu Sans Mono" ];
+    emoji = [ "Noto Color Emoji" ];
+  };
   fonts.packages = with pkgs; [
+    inter
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
     nerd-fonts.meslo-lg

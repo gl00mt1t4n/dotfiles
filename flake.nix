@@ -25,9 +25,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, claude-desktop, ... }:
+  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, claude-desktop, hermes-agent, ... }:
   let
     system = "x86_64-linux";
     overlays = [
@@ -74,6 +78,7 @@
         { nixpkgs.overlays = overlays; }
         ./configuration.nix
         sops-nix.nixosModules.sops
+        hermes-agent.nixosModules.default
       ];
     };
 
@@ -91,6 +96,7 @@
         { nixpkgs.overlays = overlays; }
         ./configuration.nix
         sops-nix.nixosModules.sops
+        hermes-agent.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

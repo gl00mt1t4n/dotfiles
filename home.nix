@@ -13,6 +13,10 @@
 
   gtk = {
     enable = true;
+    font = {
+      name = "Inter";
+      size = 11;
+    };
     theme = {
       name = "catppuccin-mocha-mauve-standard+rimless";
       package = pkgs.catppuccin-gtk.override {
@@ -40,6 +44,12 @@
     antialiasing = true;
     hinting = "slight";
     subpixelRendering = "rgb";
+    defaultFonts = {
+      sansSerif = [ "Inter" "Noto Sans" "DejaVu Sans" ];
+      serif = [ "Noto Serif" "DejaVu Serif" ];
+      monospace = [ "MesloLGS Nerd Font Mono" "JetBrainsMono Nerd Font Mono" "DejaVu Sans Mono" ];
+      emoji = [ "Noto Color Emoji" ];
+    };
     configFile.lcdfilter = {
       enable = true;
       priority = 10;
@@ -53,6 +63,46 @@
               <const>lcddefault</const>
             </edit>
           </match>
+        </fontconfig>
+      '';
+    };
+    configFile.defaultFonts = {
+      enable = true;
+      priority = 99;
+      label = "gl00m-default-fonts";
+      text = ''
+        <?xml version='1.0'?>
+        <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+        <fontconfig>
+          <alias>
+            <family>sans-serif</family>
+            <prefer>
+              <family>Inter</family>
+              <family>Noto Sans</family>
+              <family>DejaVu Sans</family>
+            </prefer>
+          </alias>
+          <alias>
+            <family>serif</family>
+            <prefer>
+              <family>Noto Serif</family>
+              <family>DejaVu Serif</family>
+            </prefer>
+          </alias>
+          <alias>
+            <family>monospace</family>
+            <prefer>
+              <family>MesloLGS Nerd Font Mono</family>
+              <family>JetBrainsMono Nerd Font Mono</family>
+              <family>DejaVu Sans Mono</family>
+            </prefer>
+          </alias>
+          <alias>
+            <family>emoji</family>
+            <prefer>
+              <family>Noto Color Emoji</family>
+            </prefer>
+          </alias>
         </fontconfig>
       '';
     };
@@ -131,9 +181,14 @@
         exec zen --new-window "$@"
       fi
 
-      # Start Zen normally when launched from the app menu/dock.  Using
-      # --blank-window bypasses Zen/Firefox session restore, which made it look
-      # like tabs were lost after reboot/shutdown.
+      # When Zen is already running, create a clean task window instead of asking
+      # the existing browser process to reopen/focus the restored session window.
+      if pgrep -xu "$USER" -x .zen-wrapped >/dev/null; then
+        exec zen --new-window about:blank
+      fi
+
+      # First launch after reboot/login should be the normal Zen startup path so
+      # browser.startup.page=3 restores the previous window/tabs intact.
       exec zen
     '';
   };
@@ -157,16 +212,43 @@
             'user_pref("media.hardware-video-decoding.force-enabled", true);' \
             'user_pref("gfx.webrender.all", true);' \
             'user_pref("widget.dmabuf.force-enabled", true);' \
+            'user_pref("layers.acceleration.disabled", false);' \
+            'user_pref("gfx.x11-egl.force-enabled", false);' \
+            'user_pref("gfx.font_rendering.cleartype_params.rendering_mode", -1);' \
             'user_pref("media.av1.enabled", false);'
           do
             pref_name=$(printf '%s\n' "$pref" | ${pkgs.coreutils}/bin/cut -d'"' -f2)
             ${pkgs.gnused}/bin/sed -i "/user_pref(\"$pref_name\"/d" "$user_js"
             printf '%s\n' "$pref" >> "$user_js"
           done
+
+          # Old profile state had this set to true, which disables the browser's
+          # accelerated compositor even when WebRender prefs are enabled. Remove
+          # the stale true value from prefs.js; user.js above pins the intended
+          # value on browser restart.
+          prefs_js="$profile_dir/prefs.js"
+          if [ -f "$prefs_js" ]; then
+            ${pkgs.gnused}/bin/sed -i '/user_pref("layers\.acceleration\.disabled", true);/d' "$prefs_js"
+          fi
+
+          shortcuts_json="$profile_dir/zen-keyboard-shortcuts.json"
+          if [ -f "$shortcuts_json" ]; then
+            tmp="$shortcuts_json.tmp"
+            ${pkgs.jq}/bin/jq '
+              (.shortcuts[] | select(.id == "key_newNavigator")) |=
+                (.action = "cmd_zenNewNavigatorUnsynced"
+                 | .l10nId = "zen-new-unsynced-window-shortcut"
+                 | .reserved = false
+                 | .disabled = false)
+              | (.shortcuts[] | select(.id == "zen-new-unsynced-window")) |=
+                (.key = "" | .keycode = "" | .disabled = true)
+            ' "$shortcuts_json" > "$tmp" && mv "$tmp" "$shortcuts_json"
+          fi
         done < <(${pkgs.findutils}/bin/find "$zen_dir" -maxdepth 1 -type d \( -name "*.default*" -o -name "*.zen*" -o -name "*.release*" -o -name "*.Default Profile" \) -print0)
       fi
     done
   '';
+
 
   xdg.mimeApps = {
     enable = true;
@@ -198,6 +280,19 @@
 
   # Allow home-manager to own mimeapps.list (overwrites any manually created copy)
   xdg.configFile."mimeapps.list".force = true;
+
+  xdg.desktopEntries.hermes = {
+    name = "Hermes";
+    genericName = "AI Agent";
+    exec = "kitty --app-id com.nousresearch.hermes --title Hermes hermes";
+    terminal = false;
+    categories = [ "Network" ];
+    comment = "NousResearch Hermes AI Agent";
+    startupNotify = true;
+    settings = {
+      StartupWMClass = "com.nousresearch.hermes";
+    };
+  };
 
   xdg.desktopEntries.zen = {
     name = "Zen Browser";
@@ -233,4 +328,5 @@
       };
     };
   };
+
 }

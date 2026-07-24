@@ -14,8 +14,11 @@
     kitty
     firefox
     zen-browser
+    brave
+    telegram-desktop
     vesktop
     pavucontrol
+    qpwgraph
 
     # Desktop helpers
     zenity
@@ -23,12 +26,24 @@
     libnotify
     playerctl
     lxqt.lxqt-policykit
+    networkmanagerapplet
+    iw
     appimage-run
+
+    # Gaming diagnostics/wrappers. Steam installs games itself; these help run
+    # and measure them cleanly on Wayland/HiDPI.
+    gamescope
+    mangohud
+    protonup-qt
 
     # Agent/AI tools
     claude-code
 
     # Fonts/themes/icons
+    inter
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
     nerd-fonts.meslo-lg
     catppuccin-gtk
     papirus-icon-theme
@@ -37,5 +52,8 @@
     # CLI tools
     git
     jq
+    alsa-utils
+    pamixer
+    pulseaudio
   ];
 }
