@@ -63,7 +63,10 @@
     };
 
     homeModules = [ ./home.nix ];
-    homeExtraSpecialArgs = { inherit caelestiaShell caelestiaCli caelestiaSpotify; };
+    homeExtraSpecialArgs = {
+      inherit caelestiaShell caelestiaCli caelestiaSpotify;
+      hermesDesktop = hermes-agent.packages.${system}.desktop;
+    };
   in {
     packages.${system} = {
       caelestia-shell = caelestiaShell;

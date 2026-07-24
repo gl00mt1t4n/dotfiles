@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, hermesDesktop, ... }:
 {
   # Put normal user-facing apps here.
   #
@@ -38,6 +38,7 @@
 
     # Agent/AI tools
     claude-code
+    hermesDesktop
 
     # Fonts/themes/icons
     inter
@@ -54,6 +55,5 @@
     jq
     alsa-utils
     pamixer
-    pulseaudio
   ];
 }

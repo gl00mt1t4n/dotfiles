@@ -281,19 +281,6 @@
   # Allow home-manager to own mimeapps.list (overwrites any manually created copy)
   xdg.configFile."mimeapps.list".force = true;
 
-  xdg.desktopEntries.hermes = {
-    name = "Hermes";
-    genericName = "AI Agent";
-    exec = "kitty --app-id com.nousresearch.hermes --title Hermes hermes";
-    terminal = false;
-    categories = [ "Network" ];
-    comment = "NousResearch Hermes AI Agent";
-    startupNotify = true;
-    settings = {
-      StartupWMClass = "com.nousresearch.hermes";
-    };
-  };
-
   xdg.desktopEntries.zen = {
     name = "Zen Browser";
     genericName = "Web Browser";
