@@ -24,16 +24,20 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+    url = "github:NousResearch/hermes-agent";
+  };
     claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, claude-desktop, ... }:
+  outputs = { self, nixpkgs, home-manager, sops-nix, quickshell, caelestia-cli, zen-browser, claude-desktop, hermes-agent, ... }:
   let
     system = "x86_64-linux";
     overlays = [
       (final: prev: {
         zen-browser = zen-browser.packages.${system}.default;
         claude-desktop = claude-desktop.packages.${system}.claude-desktop;
+        hermes-desktop = hermes-agent.packages.${system}.desktop;
       })
     ];
     pkgs = import nixpkgs {
@@ -91,6 +95,8 @@
       inherit system;
       modules = [
         { nixpkgs.overlays = overlays; }
+        hermes-agent.nixosModules.default
+        ./modules/hermes.nix
         ./configuration.nix
         sops-nix.nixosModules.sops
         home-manager.nixosModules.home-manager

@@ -24,7 +24,7 @@
   users.users.gl00m = {
     isNormalUser = true;
     description = "gl00m";
-    extraGroups = [ "networkmanager" "wheel" "video" "i2c" "hermes" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "i2c" "docker" ];
   };
 
   nixpkgs.config.allowUnfree = true;
