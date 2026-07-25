@@ -55,6 +55,14 @@
   # Shell
   programs.bash.enable = true;
 
+  # Keep a successful sudo authentication valid for an hour and share it among
+  # terminal sessions. This avoids repeated password prompts during normal
+  # system-maintenance work while retaining a finite expiration.
+  security.sudo.extraConfig = ''
+    Defaults timestamp_timeout=60
+    Defaults timestamp_type=global
+  '';
+
   # Hyprland
   programs.hyprland = {
     enable = true;
